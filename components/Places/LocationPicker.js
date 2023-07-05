@@ -4,10 +4,12 @@ import {Colors} from "../../constants/colors";
 import {getCurrentPositionAsync, PermissionStatus, useForegroundPermissions} from 'expo-location';
 import {getMapPreview} from "../../util/location";
 import {useState} from "react";
+import {useNavigation} from "@react-navigation/native";
 
 function LocationPicker() {
     const [pickedLocation, setPickedLocation] = useState();
     const [locationPermissionInformation, requestPermission] = useForegroundPermissions();
+    const navigation = useNavigation();
 
     async function verifyPermissions() {
         if (locationPermissionInformation.status === PermissionStatus.UNDETERMINED) {
@@ -39,7 +41,7 @@ function LocationPicker() {
     }
 
     function pickOnMapHandler() {
-
+        navigation.navigate('Map');
     }
 
     let locationPreview = <Text>No location picked yet.</Text>
