@@ -41,6 +41,7 @@ function PlaceDetails({ route, navigation }) {
             <Image style={styles.image} source={{ uri: fetchedPlace.imageUri }}/>
             <View style={styles.locationContainer}>
                 <View style={styles.addressContainer}>
+                    <Text>{fetchedPlace.date}</Text>
                     <Text style={styles.address}>{fetchedPlace.address}</Text>
                 </View>
                 <OutlinedButton

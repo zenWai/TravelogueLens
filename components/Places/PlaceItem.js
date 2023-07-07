@@ -11,6 +11,7 @@ function PlaceItem({ place, onSelect }) {
             <View style={styles.info}>
                 <Text style={styles.title}>{place.title}</Text>
                 <Text style={styles.address}>{place.address}</Text>
+                <Text style={styles.title}>{place.date}</Text>
             </View>
         </Pressable>
     );

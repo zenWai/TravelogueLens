@@ -13,7 +13,8 @@ export function init() {
                                imageUri TEXT                NOT NULL,
                                address  TEXT                NOT NULL,
                                lat      REAL                NOT NULL,
-                               lng      REAL                NOT NULL
+                               lng      REAL                NOT NULL,
+                               date     TEXT                NOT NULL
                            )`,
                 [],
                 () => {
@@ -29,17 +30,25 @@ export function init() {
 }
 
 export function insertPlace(place) {
+    const currentDate = new Date();
+    const dateOptions = {
+        day: '2-digit',
+        month: 'short',
+        year: 'numeric',
+    };
+    const formattedDate = currentDate.toLocaleDateString('en-US', dateOptions);
     const promise = new Promise((resolve, reject) => {
         database.transaction((tx) => {
             tx.executeSql(
-                `INSERT INTO places (title, imageUri, address, lat, lng)
-                 VALUES (?, ?, ?, ?, ?)`,
+                `INSERT INTO places (title, imageUri, address, lat, lng, date)
+                 VALUES (?, ?, ?, ?, ?, ?)`,
                 [
                     place.title,
                     place.imageUri,
                     place.address,
                     place.location.lat,
-                    place.location.lng
+                    place.location.lng,
+                    formattedDate,
                 ],
                 (_, result) => {
                     console.log("insert place:");
@@ -72,7 +81,8 @@ export function fetchPlaces() {
                                     lat: dp.lat,
                                     lng: dp.lng,
                                 },
-                                dp.id
+                                dp.id,
+                                dp.date,
                             )
                         );
                     }
@@ -100,6 +110,7 @@ export function fetchPlaceDetails(id) {
                         dbPlace.imageUri,
                         { lat: dbPlace.lat, lng: dbPlace.lng, address: dbPlace.address },
                         dbPlace.id,
+                        dbPlace.date,
                     );
                     resolve(place);
                 },
