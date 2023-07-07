@@ -1,4 +1,4 @@
-import {Alert, Image, StyleSheet, Text, View} from "react-native";
+import {ActivityIndicator, Alert, Image, StyleSheet, Text, View} from "react-native";
 import OutlinedButton from "../UI/OutlinedButton";
 import {Colors} from "../../constants/colors";
 import {getCurrentPositionAsync, PermissionStatus, useForegroundPermissions} from 'expo-location';
@@ -14,6 +14,8 @@ function LocationPicker({ onLocationPick }) {
 
     //false when we enter de map screen
     const isFocused = useIsFocused();
+    //for My Location ActivityIndicator
+    const [loadingLocation, setLoadingLocation] = useState(false);
 
     useEffect(() => {
         if (isFocused && route.params) {
@@ -29,8 +31,16 @@ function LocationPicker({ onLocationPick }) {
     useEffect(() => {
         async function handleLocation() {
             if (pickedLocation) {
-                const address = await getAddress(pickedLocation.lat, pickedLocation.lng);
-                onLocationPick({ ...pickedLocation, address: address });
+                try {
+                    const address = await getAddress(pickedLocation.lat, pickedLocation.lng);
+                    onLocationPick({ ...pickedLocation, address: address });
+                } catch (error) {
+                    console.log('Error fetching address:', error);
+                    Alert.alert(
+                        'Oops, something went wrong',
+                        'Could not get your location. Try again!'
+                    );
+                }
             }
         }
 
@@ -60,11 +70,18 @@ function LocationPicker({ onLocationPick }) {
         if (!hasPermission) {
             return;
         }
-        const location = await getCurrentPositionAsync();
-        setPickedLocation({
-            lat: location.coords.latitude,
-            lng: location.coords.longitude
-        });
+        setLoadingLocation(true);
+        try {
+            const location = await getCurrentPositionAsync();
+            setPickedLocation({
+                lat: location.coords.latitude,
+                lng: location.coords.longitude
+            });
+        } catch (error) {
+            console.log(error);
+        } finally {
+            setLoadingLocation(false)
+        }
     }
 
     function pickOnMapHandler() {
@@ -82,12 +99,15 @@ function LocationPicker({ onLocationPick }) {
                 }}
             />
         );
-        console.log(pickedLocation.lat);
     }
 
     return (
         <View style={{ flex: 1 }}>
-            <View style={styles.mapPreview}>{locationPreview}</View>
+            <View style={styles.mapPreview}>
+                {loadingLocation ? (
+                    <ActivityIndicator size="small" color={Colors.primary500}/>
+                ) : (locationPreview)}
+            </View>
             <View style={styles.actions}>
                 <OutlinedButton icon="location" onPress={getLocationHandler}>
                     My Location
@@ -105,7 +125,6 @@ export default LocationPicker;
 const styles = StyleSheet.create({
     mapPreview: {
         width: '100%',
-        height: 200,
         marginVertical: 8,
         justifyContent: 'center',
         alignItems: 'center',
@@ -119,7 +138,7 @@ const styles = StyleSheet.create({
     },
     mapPreviewImage: {
         width: '100%',
-        height: '100%',
+        height: 200,
         borderRadius: 4,
     },
 });
