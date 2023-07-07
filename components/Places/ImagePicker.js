@@ -1,4 +1,4 @@
-import {Alert, Image, StyleSheet, Text, View} from "react-native";
+import {Alert, Image, Platform, StyleSheet, Text, View} from "react-native";
 import {launchCameraAsync, PermissionStatus, useCameraPermissions} from "expo-image-picker";
 import {useState} from "react";
 import {Colors} from "../../constants/colors";
@@ -30,20 +30,26 @@ function ImagePicker({onImageTaken}) {
         if (!hasPermission) {
             return;
         }
-        const image =
-            await launchCameraAsync({
-                allowsEditing: true,
-                aspect: [16, 9],
-                quality: 0.5,
-            });
-        setPickedImage(image.assets);
-        onImageTaken(image.assets);
+        const image = await launchCameraAsync({
+            /*
+             * Disable Expo cropping functionality,
+             * considering react-native-image-crop-picker instead
+             * crop function is faulty
+             */
+            allowsEditing: Platform.OS === 'android',
+            quality: 1,
+        });
+
+        if (!image.canceled) {
+            setPickedImage(image.assets);
+            onImageTaken(image.assets);
+        }
     }
 
     let imagePreview = <Text>No image taken yet.</Text>;
 
     if (pickedImage) {
-        imagePreview = <Image style={styles.image} source={{ uri: pickedImage[0].uri }}/>;
+        imagePreview = <Image style={styles.image} source={{ uri: pickedImage[0].uri }} resizeMode="stretch"/>;
     }
     return (
         <View>
