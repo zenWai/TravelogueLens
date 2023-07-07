@@ -1,10 +1,10 @@
-import {Alert, Image, Platform, StyleSheet, Text, View} from "react-native";
+import {Alert, Image, Linking, Platform, StyleSheet, Text, View} from "react-native";
 import {launchCameraAsync, PermissionStatus, useCameraPermissions} from "expo-image-picker";
 import {useState} from "react";
 import {Colors} from "../../constants/colors";
 import OutlinedButton from "../UI/OutlinedButton";
 
-function ImagePicker({onImageTaken}) {
+function ImagePicker({ onImageTaken }) {
     const [cameraPermissionInformation, requestPermission] = useCameraPermissions();
     const [pickedImage, setPickedImage] = useState();
 
@@ -14,10 +14,24 @@ function ImagePicker({onImageTaken}) {
             return permissionResponse.granted;
         }
 
+        function openSettings() {
+            Linking.openSettings();
+        }
+
         if (cameraPermissionInformation.status === PermissionStatus.DENIED) {
             Alert.alert(
                 'Insufficient Permissions',
-                'You need to grant camera permissions to use this app'
+                'You need to grant camera permissions to use this app',
+                [
+                    {
+                        text: 'Cancel',
+                        style: 'cancel',
+                    },
+                    {
+                        text: 'Open Settings',
+                        onPress: () => openSettings(),
+                    },
+                ]
             );
             return false;
         }

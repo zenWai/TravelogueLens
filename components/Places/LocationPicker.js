@@ -1,4 +1,4 @@
-import {ActivityIndicator, Alert, Image, StyleSheet, Text, View} from "react-native";
+import {ActivityIndicator, Alert, Image, Linking, StyleSheet, Text, View} from "react-native";
 import OutlinedButton from "../UI/OutlinedButton";
 import {Colors} from "../../constants/colors";
 import {getCurrentPositionAsync, PermissionStatus, useForegroundPermissions} from 'expo-location';
@@ -54,10 +54,24 @@ function LocationPicker({ onLocationPick }) {
             return permissionResponse.granted;
         }
 
+        function openSettings() {
+            Linking.openSettings();
+        }
+
         if (locationPermissionInformation.status === PermissionStatus.DENIED) {
             Alert.alert(
                 'Insufficient Permissions',
-                'You need to grant camera permissions to use this app'
+                'You need to grant location permissions to use this app',
+                [
+                    {
+                        text: 'Cancel',
+                        style: 'cancel',
+                    },
+                    {
+                        text: 'Open Settings',
+                        onPress: () => openSettings(),
+                    },
+                ]
             );
             return false;
         }
