@@ -12,22 +12,6 @@ import PlaceDetails from "./screens/PlaceDetails";
 
 const Stack = createNativeStackNavigator();
 export default function App() {
-    const [dbInitialized, setDbInitialized] = useState(false);
-    useEffect(() => {
-        init()
-            .then(() => {
-                setDbInitialized(true);
-                console.log('db Init')
-            }).catch((err) => {
-            console.log(err);
-        });
-    }, []);
-
-    if (!dbInitialized) {
-        //return app loading
-        //expo Slashscreen
-    }
-
     return (
         <>
             <StatusBar style={'dark'}/>

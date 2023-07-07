@@ -1,7 +1,7 @@
 import PlacesList from "../components/Places/PlacesList";
 import {useEffect, useState} from "react";
 import {useIsFocused} from "@react-navigation/native";
-import {fetchPlaces} from "../util/database";
+import {fetchPlaces, init} from "../util/database";
 
 function AllPlaces({ route }) {
     const [loadedPlaces, setLoadedPlaces] = useState([]);
@@ -9,6 +9,7 @@ function AllPlaces({ route }) {
 
     useEffect(() => {
         async function loadPlaces() {
+            await init();
             const places = await fetchPlaces();
             setLoadedPlaces(places)
         }
