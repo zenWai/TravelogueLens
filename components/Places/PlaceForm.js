@@ -19,7 +19,7 @@ function PlaceForm({onCreatePlace}) {
         console.log(enteredTitle);
         console.log(imageTaken);
         console.log(locationPicked);
-        const placeData = new Place(enteredTitle,imageTaken,locationPicked);
+        const placeData = new Place(enteredTitle,imageTaken[0].uri,locationPicked);
         onCreatePlace(placeData);
     }
 
