@@ -1,4 +1,4 @@
-import {ScrollView, StyleSheet, Text, TextInput, View} from "react-native";
+import {Alert, ScrollView, StyleSheet, Text, TextInput, View} from "react-native";
 import {useCallback, useState} from "react";
 import {Colors} from "../../constants/colors";
 import ImagePicker from "./ImagePicker";
@@ -16,9 +16,22 @@ function PlaceForm({ onCreatePlace }) {
     }
 
     function savePlaceHandler() {
-        console.log(enteredTitle);
-        console.log(imageTaken);
-        console.log(locationPicked);
+        const missingFields = [];
+        if (!enteredTitle) {
+            missingFields.push('Title');
+        }
+        if (!locationPicked) {
+            missingFields.push('Location');
+        }
+        if (!imageTaken) {
+            missingFields.push('Photo');
+        }
+        if (missingFields.length > 0) {
+            const missingFieldsText = missingFields.join(', ');
+            const alertMessage = `${missingFieldsText}`;
+            Alert.alert('To save this place we need this information:', alertMessage);
+            return;
+        }
         const placeData = new Place(enteredTitle, imageTaken[0].uri, locationPicked);
         onCreatePlace(placeData);
     }
