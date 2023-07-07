@@ -6,7 +6,7 @@ import LocationPicker from "./LocationPicker";
 import Button from "../UI/Button";
 import {Place} from "../../models/place";
 
-function PlaceForm({onCreatePlace}) {
+function PlaceForm({ onCreatePlace }) {
     const [enteredTitle, setEnteredTitle] = useState('');
     const [locationPicked, setLocationPicked] = useState();
     const [imageTaken, setImageTaken] = useState();
@@ -19,7 +19,7 @@ function PlaceForm({onCreatePlace}) {
         console.log(enteredTitle);
         console.log(imageTaken);
         console.log(locationPicked);
-        const placeData = new Place(enteredTitle,imageTaken[0].uri,locationPicked);
+        const placeData = new Place(enteredTitle, imageTaken[0].uri, locationPicked);
         onCreatePlace(placeData);
     }
 
@@ -29,7 +29,7 @@ function PlaceForm({onCreatePlace}) {
 
     const onLocationPickHandler = useCallback((location) => {
         setLocationPicked(location);
-    },[]);
+    }, []);
 
     return (
         <ScrollView style={styles.form}>
