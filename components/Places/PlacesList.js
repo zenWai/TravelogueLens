@@ -36,8 +36,13 @@ function PlacesList({ places }) {
             style={styles.list}
             data={places}
             keyExtractor={(item) => item.id}
-            renderItem={({ item }) => <PlaceItem place={item} onSelect={selectPlaceHandler}
-                                                 onDelete={onDeleteHandler}/>}
+            renderItem={({ item }) =>
+                <PlaceItem
+                    place={item}
+                    onSelect={selectPlaceHandler}
+                    onDelete={onDeleteHandler}
+                />}
+            ItemSeparatorComponent={() => <View style={styles.separator}/>}
         />
     )
 }
@@ -45,6 +50,10 @@ function PlacesList({ places }) {
 export default PlacesList;
 
 const styles = StyleSheet.create({
+    separator: {
+        height: 3,
+        backgroundColor: Colors.primary700,
+    },
     list: {
         margin: 24,
     },

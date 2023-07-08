@@ -32,7 +32,11 @@ function PlaceForm({ onCreatePlace }) {
             Alert.alert('To save this place we need this information:', alertMessage);
             return;
         }
-        const placeData = new Place(enteredTitle, imageTaken[0].uri, locationPicked);
+        const placeData = new Place(
+            enteredTitle,
+            imageTaken[0].uri,
+            locationPicked,
+        );
         onCreatePlace(placeData);
     }
 

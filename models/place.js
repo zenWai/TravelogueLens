@@ -7,5 +7,6 @@ export class Place {
         //sometimes undefined?
         this.id = id;
         this.date = date;
+        this.nearbyPOIS = location.nearbyPOIS;
     }
 }

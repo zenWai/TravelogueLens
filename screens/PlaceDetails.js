@@ -8,7 +8,7 @@ function PlaceDetails({ route, navigation }) {
     const [fetchedPlace, setFetchedPlace] = useState();
 
     function showOnMapHandler() {
-        navigation.navigate('Map',{
+        navigation.navigate('Map', {
             initialLat: fetchedPlace.location.lat,
             initialLng: fetchedPlace.location.lng,
         });
@@ -49,6 +49,15 @@ function PlaceDetails({ route, navigation }) {
                     onPress={showOnMapHandler}
                     children="Show on Map"
                 />
+            </View>
+            <View style={styles.locationContainer}>
+                <Text style={styles.addressContainer}>Nearby Points of Interest:</Text>
+                {fetchedPlace.nearbyPOIS[0].map((poi, index) => (
+                    <View key={index}>
+                        <Text style={styles.address}>{poi.name}</Text>
+                        <Text style={styles.address}>Rating: {poi.rating}</Text>
+                    </View>
+                ))}
             </View>
         </ScrollView>
     );

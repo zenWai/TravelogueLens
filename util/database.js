@@ -8,13 +8,14 @@ export function init() {
         database.transaction((tx) => {
             tx.executeSql(`CREATE TABLE IF NOT EXISTS places
                            (
-                               id       INTEGER PRIMARY KEY NOT NULL,
-                               title    TEXT                NOT NULL,
-                               imageUri TEXT                NOT NULL,
-                               address  TEXT                NOT NULL,
-                               lat      REAL                NOT NULL,
-                               lng      REAL                NOT NULL,
-                               date     TEXT                NOT NULL
+                               id         INTEGER PRIMARY KEY NOT NULL,
+                               title      TEXT                NOT NULL,
+                               imageUri   TEXT                NOT NULL,
+                               address    TEXT                NOT NULL,
+                               lat        REAL                NOT NULL,
+                               lng        REAL                NOT NULL,
+                               date       TEXT                NOT NULL,
+                               nearbyPOIS TEXT
                            )`,
                 [],
                 () => {
@@ -37,11 +38,14 @@ export function insertPlace(place) {
         year: 'numeric',
     };
     const formattedDate = currentDate.toLocaleDateString('en-US', dateOptions);
+    //expo-sqlite does not support array storing
+    console.log(place.nearbyPOIS);
+    const nearbyPOISString = JSON.stringify(place.nearbyPOIS);
     const promise = new Promise((resolve, reject) => {
         database.transaction((tx) => {
             tx.executeSql(
-                `INSERT INTO places (title, imageUri, address, lat, lng, date)
-                 VALUES (?, ?, ?, ?, ?, ?)`,
+                `INSERT INTO places (title, imageUri, address, lat, lng, date, nearbyPOIS)
+                 VALUES (?, ?, ?, ?, ?, ?, ?)`,
                 [
                     place.title,
                     place.imageUri,
@@ -49,6 +53,7 @@ export function insertPlace(place) {
                     place.location.lat,
                     place.location.lng,
                     formattedDate,
+                    nearbyPOISString
                 ],
                 (_, result) => {
                     console.log("insert place:");
@@ -111,7 +116,10 @@ export function fetchPlaceDetails(id) {
                         { lat: dbPlace.lat, lng: dbPlace.lng, address: dbPlace.address },
                         dbPlace.id,
                         dbPlace.date,
+                        dbPlace.nearbyPOIS
                     );
+                    place.nearbyPOIS = JSON.parse(dbPlace.nearbyPOIS);
+                    console.log(place.nearbyPOIS)
                     resolve(place);
                 },
                 (_, error) => {

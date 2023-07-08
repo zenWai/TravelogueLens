@@ -2,7 +2,7 @@ import {ActivityIndicator, Alert, Image, Linking, StyleSheet, Text, View} from "
 import OutlinedButton from "../UI/OutlinedButton";
 import {Colors} from "../../constants/colors";
 import {getCurrentPositionAsync, PermissionStatus, useForegroundPermissions} from 'expo-location';
-import {getAddress, getMapPreview} from "../../util/location";
+import {getAddress, getMapPreview, getNearbyPointsOfInterest} from "../../util/location";
 import {useEffect, useState} from "react";
 import {useIsFocused, useNavigation, useRoute} from "@react-navigation/native";
 
@@ -33,7 +33,8 @@ function LocationPicker({ onLocationPick }) {
             if (pickedLocation) {
                 try {
                     const address = await getAddress(pickedLocation.lat, pickedLocation.lng);
-                    onLocationPick({ ...pickedLocation, address: address });
+                    const nearbyPOIS = await getNearbyPointsOfInterest(pickedLocation.lat, pickedLocation.lng);
+                    onLocationPick({ ...pickedLocation, address: address, nearbyPOIS: [nearbyPOIS] });
                 } catch (error) {
                     console.log('Error fetching address:', error);
                     Alert.alert(
