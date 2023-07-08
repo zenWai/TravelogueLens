@@ -1,25 +1,60 @@
-import {Image, Pressable, StyleSheet, Text, View} from "react-native";
+import {Image, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import {Colors} from "../../constants/colors";
+import {GestureHandlerRootView, RectButton, Swipeable} from 'react-native-gesture-handler';
+import {Ionicons} from '@expo/vector-icons';
 
-function PlaceItem({ place, onSelect }) {
+function PlaceItem({ place, onSelect, onDelete }) {
+    const handleDelete = () => {
+        onDelete(place.id);
+    };
+    const renderRightActions = () => {
+        return (
+            <RectButton style={styles.rightActions} onPress={handleDelete}>
+                <Text style={styles.title}>Delete</Text>
+                <Ionicons name="trash-outline" size={20} color={Colors.gray700}/>
+            </RectButton>
+        );
+    };
+
     return (
-        <Pressable
-            style={({ pressed }) => [styles.item, pressed && styles.pressed]}
-            onPress={onSelect.bind(this, place.id)}
-        >
-            <Image style={styles.image} source={{ uri: place.imageUri }}/>
-            <View style={styles.info}>
-                <Text style={styles.title}>{place.title}</Text>
-                <Text style={styles.address}>{place.address}</Text>
-                <Text style={styles.title}>{place.date}</Text>
-            </View>
-        </Pressable>
+        <GestureHandlerRootView style={{ flex: 1 }}>
+            <Swipeable
+                renderRightActions={renderRightActions}
+                useNativeAnimations={false}
+            >
+                <TouchableOpacity
+                    style={styles.item}
+                    onPress={onSelect.bind(this, place.id)}
+                >
+                    <Image style={styles.image} source={{ uri: place.imageUri }}/>
+                    <View style={styles.info}>
+                        <Text style={styles.title}>{place.title}</Text>
+                        <Text style={styles.address}>{place.address}</Text>
+                        <Text style={styles.title}>{place.date}</Text>
+                    </View>
+                </TouchableOpacity>
+            </Swipeable>
+        </GestureHandlerRootView>
     );
 }
 
 export default PlaceItem;
 
 const styles = StyleSheet.create({
+    rightActions: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: 75,
+        backgroundColor: 'red',
+        borderRadius: 6,
+        marginVertical: 12,
+        marginHorizontal: 12,
+        elevation: 2,
+        shadowColor: 'black',
+        shadowOpacity: 0.15,
+        shadowOffset: { width: 1, height: 1 },
+        shadowRadius: 2,
+    },
     item: {
         flexDirection: 'row',
         alignItems: 'flex-start',
@@ -31,9 +66,6 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.15,
         shadowOffset: { width: 1, height: 1 },
         shadowRadius: 2,
-    },
-    pressed: {
-        opacity: 0.9,
     },
     image: {
         flex: 1,

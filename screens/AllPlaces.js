@@ -13,11 +13,12 @@ function AllPlaces({ route }) {
             const places = await fetchPlaces();
             setLoadedPlaces(places)
         }
+
         if (isFocused) {
             loadPlaces();
             /*setLoadedPlaces(curPlaces => [...curPlaces, route.params.place]);*/
         }
-    }, [isFocused]);
+    }, [isFocused, loadedPlaces]);
 
     return (
         <PlacesList places={loadedPlaces}/>
