@@ -17,7 +17,7 @@ function PlaceForm({ onCreatePlace }) {
 
     function savePlaceHandler() {
         const missingFields = [];
-        if (!enteredTitle) {
+        if (!enteredTitle || enteredTitle.trim().length === 0) {
             missingFields.push('Title');
         }
         if (!locationPicked) {
@@ -37,6 +37,7 @@ function PlaceForm({ onCreatePlace }) {
             imageTaken[0].uri,
             locationPicked,
         );
+        console.log('Place Data: ', placeData);
         onCreatePlace(placeData);
     }
 

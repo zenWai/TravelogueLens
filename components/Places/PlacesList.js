@@ -4,7 +4,7 @@ import {Colors} from "../../constants/colors";
 import {useNavigation} from "@react-navigation/native";
 import {deletePlace} from "../../util/database";
 
-function PlacesList({ places }) {
+function PlacesList({ places, onDelete }) {
     const navigation = useNavigation();
 
     function selectPlaceHandler(id) {
@@ -25,6 +25,7 @@ function PlacesList({ places }) {
         deletePlace(id)
             .then(() => {
                 console.log('Place deleted successfully');
+                onDelete(id);
             })
             .catch((error) => {
                 console.log('Error deleting place:', error);

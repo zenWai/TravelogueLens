@@ -2,8 +2,8 @@ import {ActivityIndicator, Alert, Image, Linking, StyleSheet, Text, View} from "
 import OutlinedButton from "../UI/OutlinedButton";
 import {Colors} from "../../constants/colors";
 import {getCurrentPositionAsync, PermissionStatus, useForegroundPermissions} from 'expo-location';
-import {getAddress, getMapPreview, getNearbyPointsOfInterest} from "../../util/location";
-import {useEffect, useState} from "react";
+import {getMapPreview} from "../../util/location";
+import {useCallback, useEffect, useState} from "react";
 import {useIsFocused, useNavigation, useRoute} from "@react-navigation/native";
 
 function LocationPicker({ onLocationPick }) {
@@ -12,9 +12,7 @@ function LocationPicker({ onLocationPick }) {
     const navigation = useNavigation();
     const route = useRoute();
 
-    //false when we enter de map screen
     const isFocused = useIsFocused();
-    //for My Location ActivityIndicator
     const [loadingLocation, setLoadingLocation] = useState(false);
 
     useEffect(() => {
@@ -32,14 +30,12 @@ function LocationPicker({ onLocationPick }) {
         async function handleLocation() {
             if (pickedLocation) {
                 try {
-                    const address = await getAddress(pickedLocation.lat, pickedLocation.lng);
-                    const nearbyPOIS = await getNearbyPointsOfInterest(pickedLocation.lat, pickedLocation.lng);
-                    onLocationPick({ ...pickedLocation, address: address, nearbyPOIS: [nearbyPOIS] });
+                    onLocationPick({ ...pickedLocation });
                 } catch (error) {
                     console.log('Error fetching address:', error);
                     Alert.alert(
                         'Oops, something went wrong',
-                        'Could not get your location. Try again!'
+                        'Could not get your location. Please try again!'
                     );
                 }
             }
@@ -49,14 +45,14 @@ function LocationPicker({ onLocationPick }) {
 
     }, [pickedLocation, onLocationPick]);
 
+    const openSettings = useCallback(() => {
+        Linking.openSettings();
+    }, []);
+
     async function verifyPermissions() {
         if (locationPermissionInformation.status === PermissionStatus.UNDETERMINED) {
             const permissionResponse = await requestPermission();
             return permissionResponse.granted;
-        }
-
-        function openSettings() {
-            Linking.openSettings();
         }
 
         if (locationPermissionInformation.status === PermissionStatus.DENIED) {
@@ -106,6 +102,7 @@ function LocationPicker({ onLocationPick }) {
     let locationPreview = <Text>No location picked yet.</Text>
 
     if (pickedLocation) {
+        console.log(1);
         locationPreview = (
             <Image
                 style={styles.mapPreviewImage}

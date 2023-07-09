@@ -1,11 +1,24 @@
-import {Image, StyleSheet, Text, TouchableOpacity, View} from "react-native";
+import {Alert, Image, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import {Colors} from "../../constants/colors";
 import {GestureHandlerRootView, RectButton, Swipeable} from 'react-native-gesture-handler';
 import {Ionicons} from '@expo/vector-icons';
 
 function PlaceItem({ place, onSelect, onDelete }) {
     const handleDelete = () => {
-        onDelete(place.id);
+        Alert.alert(
+            "Confirmation", // Alert title
+            `Are you sure you want to delete you ${place.title} place?`, // Alert message
+            [
+                {
+                    text: "Cancel",
+                    style: "cancel"
+                },
+                {
+                    text: "Yes-I am sure!",
+                    onPress: () => onDelete(place.id)
+                }
+            ]
+        );
     };
     const renderRightActions = () => {
         return (
@@ -31,6 +44,7 @@ function PlaceItem({ place, onSelect, onDelete }) {
                         <Text style={styles.title}>{place.title}</Text>
                         <Text style={styles.address}>{place.address}</Text>
                         <Text style={styles.title}>{place.date}</Text>
+                        <Text style={styles.title}>{place.countryFlagEmoji}{place.city}</Text>
                     </View>
                 </TouchableOpacity>
             </Swipeable>
@@ -73,7 +87,7 @@ const styles = StyleSheet.create({
         borderTopLeftRadius: 4,
         height: '100%',
     },
-    //twice as big than image
+    //twice as big as image
     info: {
         flex: 2,
         padding: 12,
