@@ -19,6 +19,13 @@ function AddPlace({ navigation }) {
             const countryCode = infoFromLocation.countryCode;
             console.log('countryCode', countryCode);
             const city = infoFromLocation.city;
+            if(!city || !country) {
+                Alert.alert(
+                    'Location not found or too rural',
+                    'You can pick a nearby location on your map'
+                );
+                return;
+            }
             const maxResults = await getMaxPOIResultsSetting();
             console.log('maxResults', maxResults)
             const nearbyPOIS = await getNearbyPointsOfInterest(place.location.lat, place.location.lng, maxResults);
@@ -46,7 +53,7 @@ function AddPlace({ navigation }) {
         } catch (error) {
             console.log('Error creating place:', error);
             Alert.alert(
-                'Error',
+                error,
                 'Error occurred while creating the place, please try again',
                 [{ text: 'Okay' }]
             );

@@ -1,4 +1,4 @@
-import {Alert, Image, Linking, Platform, StyleSheet, Text, View} from "react-native";
+import {ActivityIndicator, Alert, Image, Linking, Platform, StyleSheet, Text, View} from "react-native";
 import {launchCameraAsync, PermissionStatus, useCameraPermissions} from "expo-image-picker";
 import {useState} from "react";
 import {Colors} from "../../constants/colors";
@@ -7,6 +7,7 @@ import OutlinedButton from "../UI/OutlinedButton";
 function ImagePicker({ onImageTaken }) {
     const [cameraPermissionInformation, requestPermission] = useCameraPermissions();
     const [pickedImage, setPickedImage] = useState();
+    const [loadingPicture, setLoadingPicture] = useState(false);
 
     async function verifyPermissions() {
         if (cameraPermissionInformation.status === PermissionStatus.UNDETERMINED) {
@@ -44,6 +45,8 @@ function ImagePicker({ onImageTaken }) {
         if (!hasPermission) {
             return;
         }
+
+        setLoadingPicture(true);
         const image = await launchCameraAsync({
             /*
              * Disable Expo cropping functionality,
@@ -54,10 +57,17 @@ function ImagePicker({ onImageTaken }) {
             quality: 1,
         });
 
-        if (!image.canceled) {
-            setPickedImage(image.assets);
-            onImageTaken(image.assets);
+        try {
+            if (!image.canceled) {
+                setPickedImage(image.assets);
+                onImageTaken(image.assets);
+            }
+        } catch (error) {
+            console.log('error taking picture', error);
+        } finally {
+            setLoadingPicture(false);
         }
+
     }
 
     let imagePreview = <Text>No image taken yet.</Text>;
@@ -67,7 +77,14 @@ function ImagePicker({ onImageTaken }) {
     }
     return (
         <View>
-            <View style={styles.imagePreview}>{imagePreview}</View>
+            <View style={styles.imagePreview}>
+                {loadingPicture
+                    ? (
+                        <ActivityIndicator size="large" color={Colors.primary500}/>
+                    )
+                    : (imagePreview)
+                }
+            </View>
             <OutlinedButton icon="camera" onPress={takeImageHandler}>Take Photo</OutlinedButton>
         </View>
     );

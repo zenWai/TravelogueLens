@@ -1,3 +1,4 @@
+import React from 'react';
 import {Alert, Image, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import {Colors} from "../../constants/colors";
 import {GestureHandlerRootView, RectButton, Swipeable} from 'react-native-gesture-handler';
@@ -6,7 +7,7 @@ import {Ionicons} from '@expo/vector-icons';
 function PlaceItem({ place, onSelect, onDelete }) {
     const handleDelete = () => {
         Alert.alert(
-            "Confirmation", // Alert title
+            "Confirmation",
             `Are you sure you want to delete you ${place.title} place?`, // Alert message
             [
                 {
@@ -44,7 +45,7 @@ function PlaceItem({ place, onSelect, onDelete }) {
                         <Text style={styles.title}>{place.title}</Text>
                         <Text style={styles.address}>{place.address}</Text>
                         <Text style={styles.title}>{place.date}</Text>
-                        <Text style={styles.title}>{place.countryFlagEmoji}{place.city}</Text>
+                        <Text style={styles.title}>{place.countryFlagEmoji} {place.city}</Text>
                     </View>
                 </TouchableOpacity>
             </Swipeable>

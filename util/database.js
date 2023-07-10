@@ -27,7 +27,25 @@ export function init() {
                            )`,
                 [],
                 () => {
-                    resolve();
+                    tx.executeSql(
+                        'CREATE INDEX IF NOT EXISTS idx_places_country ON places(country);',
+                        [],
+                        () => {
+                            tx.executeSql(
+                                'CREATE INDEX IF NOT EXISTS idx_places_city ON places(city);',
+                                [],
+                                resolve,
+                                (_, error) => {
+                                    reject(error);
+                                    return false;
+                                }
+                            );
+                        },
+                        (_, error) => {
+                            reject(error);
+                            return false;
+                        }
+                    );
                 },
                 (_, error) => {
                     reject(error);
@@ -51,7 +69,7 @@ export function insertPlace(place) {
     console.log(place.country);
     const countryFlagEmoji = countryCodeToEmoji(place.countryCode);
     // expo-sqlite does not support array storing
-    // So we convert the arrays into JSON strings
+    // converting the arrays into JSON strings
     const nearbyPOISString = JSON.stringify(place.nearbyPOIS);
     const poiPhotoPathsString = JSON.stringify(place.poiPhotoPaths);
     const promise = new Promise((resolve, reject) => {
@@ -117,11 +135,33 @@ export function updatePOIS(placeId, nearbyPOIS, poiPhotoPaths) {
     return promise;
 }
 
-export function fetchPlaces() {
+export function fetchPlaces(filter = {}) {
+    // Filter Logic
+    const { country, city } = filter;
+    const params = [];
+    let query = 'SELECT * FROM places';
+    const conditions = [];
+    if (city && city.length > 0) {
+        const cityPlaceholders = city.map(() => '?').join(',');
+        conditions.push(`city IN (${cityPlaceholders})`);
+        params.push(...city);
+    }
+    if (country && country.length > 0) {
+        const countryPlaceholders = country.map(() => '?').join(',');
+        conditions.push(`country IN (${countryPlaceholders})`);
+        params.push(...country);
+    }
+    if (conditions.length > 0) {
+        query += ' WHERE ' + conditions.join(' AND ');
+    }
+    console.log("Query:", query);
+    console.log("Params:", params);
+
     const promise = new Promise((resolve, reject) => {
         database.transaction((tx) => {
-            tx.executeSql('SELECT * FROM places',
-                [],
+            tx.executeSql(
+                query,
+                params,
                 (_, result) => {
                     const places = [];
                     for (const dp of result.rows._array) {

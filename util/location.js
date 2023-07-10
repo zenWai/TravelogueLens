@@ -86,7 +86,8 @@ export function getNearbyPointsOfInterest(lat, lng, maxResults) {
 }
 
 export async function fetchPointOfInterestReviews(placeId) {
-    const response = await fetch(`https://maps.googleapis.com/maps/api/place/details/json?placeid=${placeId}&fields=reviews&key=${GOOGLE_API_KEY}`);
+    const response = await fetch(`https://maps.googleapis.com/maps/api/place/details/json?placeid=${placeId}&key=${GOOGLE_API_KEY}`);
     const data = await response.json();
+    console.log(JSON.stringify(data.result, null, 2));
     return data.result.reviews;
 }

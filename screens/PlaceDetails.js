@@ -1,10 +1,11 @@
+import React, {useEffect, useState} from 'react';
 import {ActivityIndicator, Image, ScrollView, StyleSheet, Text, View} from "react-native";
 import OutlinedButton from "../components/UI/OutlinedButton";
 import {Colors} from "../constants/colors";
-import {useEffect, useState} from "react";
 import {downloadAndSavePOIPhoto, fetchPlaceDetails, getMaxPOIResultsSetting, updatePOIS} from "../util/database";
 import ReviewsList from "../components/Places/PointOfInterestReviews";
 import {fetchPointOfInterestReviews, getNearbyPointsOfInterest} from "../util/location";
+import PointsOfInterest from "../components/Places/PointsOfInterest";
 
 function PlaceDetails({ route, navigation }) {
     const [fetchedPlace, setFetchedPlace] = useState();
@@ -15,6 +16,7 @@ function PlaceDetails({ route, navigation }) {
 
     const selectedPlacedId = route.params.placeId;
 
+    let formattedDate = '';
     useEffect(() => {
         async function loadPlaceData() {
             setIsLoading(true);
@@ -55,20 +57,14 @@ function PlaceDetails({ route, navigation }) {
                     nearbyPOIS: additionalPOIS,
                     poiPhotoPaths
                 });
-                console.log(place.nearbyPOIS)
             }
         }
 
         loadPlaceData();
     }, [selectedPlacedId]);
 
-    if (isLoading || maxResults === null) {
-        return (
-            <View style={styles.fallback}>
-                <ActivityIndicator size="large" color="#0000ff"/>
-            </View>
-        );
-    } else if (!fetchedPlace) {
+
+    if (!fetchedPlace) {
         return (
             <View style={styles.fallback}>
                 <Text>No Place Data Available...</Text>
@@ -94,12 +90,13 @@ function PlaceDetails({ route, navigation }) {
         setIsReviewVisible(false);
     };
 
+
     return (
         <ScrollView>
             <Image style={styles.image} source={{ uri: fetchedPlace.imageUri }} resizeMode="stretch"/>
             <View style={styles.locationContainer}>
                 <Text style={styles.address}>{fetchedPlace.city} {fetchedPlace.date}</Text>
-                <Text style={styles.address}>{fetchedPlace.country}{fetchedPlace.countryFlagEmoji}</Text>
+                <Text style={styles.address}>{fetchedPlace.countryFlagEmoji} {fetchedPlace.country}</Text>
                 <View style={styles.addressContainer}>
                     <Text style={styles.address}>{fetchedPlace.address}</Text>
                 </View>
@@ -109,39 +106,25 @@ function PlaceDetails({ route, navigation }) {
                     children="Show on Map"
                 />
             </View>
-            {fetchedPlace.nearbyPOIS && maxResults > 0 && (
-                <View style={styles.POIcontainer}>
-                    <Text style={styles.address}>Nearby Points of Interest:</Text>
-                    {fetchedPlace.nearbyPOIS.slice(0, maxResults).map((poi, index) => (
+            {
+                isLoading || maxResults === null
+                    ? (
+                        <View style={styles.fallback}>
+                            <ActivityIndicator size="large" color="#0000ff"/>
+                        </View>
+                    )
+                    : (
                         <>
-                            <View key={index} style={styles.POIitem}>
-                                <Image
-                                    style={styles.POIimage}
-                                    source={{ uri: fetchedPlace.poiPhotoPaths[index] }}
-                                />
-                                <View style={styles.POIinfo}>
-                                    <Text style={styles.POIinfoText}>{poi.name}</Text>
-                                    <Text style={styles.POIinfoSmallText}>{poi.types.join(', ')}</Text>
-                                    <Text style={styles.POIinfoText}>{poi.rating}⭐</Text>
-                                    <Text style={styles.POIinfoSmallText}>{poi.user_ratings_total} total reviews</Text>
-                                    <View>
-                                        <OutlinedButton icon='chatbubbles'
-                                                        children={`What are people saying about ${poi.name} ?`}
-                                                        color={Colors.primary200}
-                                                        onPress={() => handleShowReviews(poi.place_id)}/>
-                                    </View>
-                                </View>
-                            </View>
-                            {/* separator*/}
-                            {index !== Math.min(fetchedPlace.nearbyPOIS.length, maxResults) - 1 && (
-                                <View style={styles.POIseparator}></View>
-                            )}
-                        </>
-                    ))}
-                </View>
-            )}
+                            <PointsOfInterest
+                                fetchedPlace={fetchedPlace}
+                                maxResults={maxResults}
+                                handleShowReviews={handleShowReviews}
+                            />
 
-            <ReviewsList reviews={currentReviews} isVisible={isReviewVisible} closeModal={closeModal}/>
+                            <ReviewsList reviews={currentReviews} isVisible={isReviewVisible} closeModal={closeModal}/>
+                        </>
+                    )
+            }
         </ScrollView>
     );
 }
@@ -221,12 +204,20 @@ const styles = StyleSheet.create({
         fontSize: 18,
         color: Colors.gray700,
     },
-    POIinfoSmallText: {
-        fontSize: 12,
-        color: Colors.gray700,
-    },
     POIseparator: {
         height: 3,
         backgroundColor: Colors.primary100,
+    },
+    POIinfoSmallText: {
+        fontSize: 12,
+        color: 'white',
+    },
+    typeContainer: {
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+    },
+    typeItem: {
+        backgroundColor: Colors.primary700,
+        margin: 2,
     },
 });

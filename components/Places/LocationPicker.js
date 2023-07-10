@@ -116,9 +116,12 @@ function LocationPicker({ onLocationPick }) {
     return (
         <View style={{ flex: 1 }}>
             <View style={styles.mapPreview}>
-                {loadingLocation ? (
-                    <ActivityIndicator size="small" color={Colors.primary500}/>
-                ) : (locationPreview)}
+                {loadingLocation
+                    ? (
+                        <ActivityIndicator size="large" color={Colors.primary500}/>
+                    )
+                    : (locationPreview)
+                }
             </View>
             <View style={styles.actions}>
                 <OutlinedButton icon="location" onPress={getLocationHandler}>

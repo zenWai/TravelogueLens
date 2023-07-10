@@ -1,4 +1,4 @@
-import {Alert, Button, StyleSheet, Text, TextInput, View} from "react-native";
+import {Alert, Button, Keyboard, KeyboardAvoidingView, StyleSheet, Text, TextInput} from "react-native";
 import {useEffect, useState} from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {getMaxPOIResultsSetting} from "../util/database";
@@ -16,6 +16,7 @@ function SettingsScreen() {
             alert('Please enter a number.');
             return;
         }
+        Keyboard.dismiss();
         await AsyncStorage.setItem('maxResults', maxResults.toString());
         Alert.alert(
             `Setting saved.`,
@@ -40,7 +41,7 @@ function SettingsScreen() {
     };
 
     return (
-        <View style={styles.container}>
+        <KeyboardAvoidingView style={styles.container} behavior="padding">
             <Text style={styles.label}>Max nearby Points of Interest to show:</Text>
             <TextInput
                 style={styles.input}
@@ -49,7 +50,7 @@ function SettingsScreen() {
                 keyboardType="numeric"
             />
             <Button title="Save" onPress={saveMaxResultsSetting}/>
-        </View>
+        </KeyboardAvoidingView>
     );
 }
 

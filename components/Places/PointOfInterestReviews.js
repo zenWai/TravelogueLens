@@ -31,7 +31,7 @@ function ReviewsList({ reviews, isVisible, closeModal }) {
                         style={styles.list}
                         data={reviews}
                         renderItem={({ item }) => <ReviewItem review={item}/>}
-                        keyExtractor={item => item.id}
+                        keyExtractor={item => item.time}
                         horizontal={true}
                         showsHorizontalScrollIndicator={false}
                         ItemSeparatorComponent={() => <View style={styles.separator}/>}
