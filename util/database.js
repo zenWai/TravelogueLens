@@ -57,13 +57,14 @@ export function init() {
 }
 
 export function insertPlace(place) {
-    const currentDate = new Date();
-    const dateOptions = {
-        day: '2-digit',
-        month: 'short',
-        year: 'numeric',
-    };
-    const formattedDate = currentDate.toLocaleDateString('en-US', dateOptions);
+    // formattedDate = YYYY-MM-DD
+    let formattedDate;
+    if (place.date == null) {
+        const currentDate = new Date();
+        formattedDate = currentDate.toISOString().split('T')[0];
+    } else {
+        formattedDate = place.date;
+    }
     console.log('place id:', place.id);
     console.log(place.city)
     console.log(place.country);
@@ -135,7 +136,7 @@ export function updatePOIS(placeId, nearbyPOIS, poiPhotoPaths) {
     return promise;
 }
 
-export function fetchPlaces(filter = {}) {
+export function fetchPlaces(filter = {}, sort ) {
     // Filter Logic
     const { country, city } = filter;
     const params = [];
@@ -153,6 +154,12 @@ export function fetchPlaces(filter = {}) {
     }
     if (conditions.length > 0) {
         query += ' WHERE ' + conditions.join(' AND ');
+    }
+
+    if (sort === "date_asc") {
+        query += ' ORDER BY date ASC';
+    } else if (sort === "date_desc") {
+        query += ' ORDER BY date DESC';
     }
     console.log("Query:", query);
     console.log("Params:", params);

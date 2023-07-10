@@ -6,6 +6,7 @@ import {downloadAndSavePOIPhoto, fetchPlaceDetails, getMaxPOIResultsSetting, upd
 import ReviewsList from "../components/Places/PointOfInterestReviews";
 import {fetchPointOfInterestReviews, getNearbyPointsOfInterest} from "../util/location";
 import PointsOfInterest from "../components/Places/PointsOfInterest";
+import formatDate from "../util/FormatDate";
 
 function PlaceDetails({ route, navigation }) {
     const [fetchedPlace, setFetchedPlace] = useState();
@@ -95,7 +96,7 @@ function PlaceDetails({ route, navigation }) {
         <ScrollView>
             <Image style={styles.image} source={{ uri: fetchedPlace.imageUri }} resizeMode="stretch"/>
             <View style={styles.locationContainer}>
-                <Text style={styles.address}>{fetchedPlace.city} {fetchedPlace.date}</Text>
+                <Text style={styles.address}>{fetchedPlace.city} {formatDate(fetchedPlace.date)}</Text>
                 <Text style={styles.address}>{fetchedPlace.countryFlagEmoji} {fetchedPlace.country}</Text>
                 <View style={styles.addressContainer}>
                     <Text style={styles.address}>{fetchedPlace.address}</Text>

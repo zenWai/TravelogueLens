@@ -10,11 +10,19 @@ import PlaceDetails from "./screens/PlaceDetails";
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs'
 import SettingsScreen from "./screens/SettingsScreen";
 import {Ionicons} from "@expo/vector-icons";
+import {showSortOptions} from "./util/SortContext";
+import {View} from "react-native";
+import React, {useContext, useState} from "react";
+import {SortContext} from "./util/SortContext";
 
 const Stack = createNativeStackNavigator();
 const BottomTabs = createBottomTabNavigator();
 
+
 function HomeTabs() {
+    console.log(React); // Should log the React object, which should include useContext
+    console.log(useContext); // Should log the useContext function
+    const { setSort } = useContext(SortContext);
     return (
         <BottomTabs.Navigator screenOptions={{
             headerStyle: { backgroundColor: Colors.primary500 },
@@ -36,12 +44,20 @@ function HomeTabs() {
                         <Ionicons name="earth-outline" size={size} color={color}/>
                     ),
                     headerRight: ({ tintColor }) => (
-                        <IconButton
-                            icon="add"
-                            size={24}
-                            color={tintColor}
-                            onPress={() => navigation.navigate('AddPlace')}
-                        />
+                        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                            <IconButton
+                                icon="funnel-outline"
+                                size={24}
+                                color={tintColor}
+                                onPress={() => showSortOptions(setSort)}
+                            />
+                            <IconButton
+                                icon="add"
+                                size={24}
+                                color={tintColor}
+                                onPress={() => navigation.navigate('AddPlace')}
+                            />
+                        </View>
                     ),
                 })}
             />
@@ -61,38 +77,42 @@ function HomeTabs() {
 }
 
 export default function App() {
+
+    const [sort, setSort] = useState(null);
     return (
         <>
             <StatusBar style={'dark'}/>
-            <NavigationContainer>
-                <Stack.Navigator screenOptions={{
-                    headerStyle: { backgroundColor: Colors.primary500 },
-                    headerTintColor: Colors.gray700,
-                    contentStyle: { backgroundColor: Colors.gray700 },
-                }}
-                >
-                    <Stack.Screen
-                        name="Home"
-                        component={HomeTabs}
-                        options={{ headerShown: false }}
-                    />
-                    <Stack.Screen
-                        name='AddPlace'
-                        component={AddPlace}
-                        options={{
-                            title: 'Add a new Place',
-                        }}
-                    />
-                    <Stack.Screen name="Map" component={Map}/>
-                    <Stack.Screen
-                        name="PlaceDetails"
-                        component={PlaceDetails}
-                        options={{
-                            title: 'Loading Place...'
-                        }}
-                    />
-                </Stack.Navigator>
-            </NavigationContainer>
+            <SortContext.Provider value={{ sort, setSort }}>
+                <NavigationContainer>
+                    <Stack.Navigator screenOptions={{
+                        headerStyle: { backgroundColor: Colors.primary500 },
+                        headerTintColor: Colors.gray700,
+                        contentStyle: { backgroundColor: Colors.gray700 },
+                    }}
+                    >
+                        <Stack.Screen
+                            name="Home"
+                            component={HomeTabs}
+                            options={{ headerShown: false }}
+                        />
+                        <Stack.Screen
+                            name='AddPlace'
+                            component={AddPlace}
+                            options={{
+                                title: 'Add a new Place',
+                            }}
+                        />
+                        <Stack.Screen name="Map" component={Map}/>
+                        <Stack.Screen
+                            name="PlaceDetails"
+                            component={PlaceDetails}
+                            options={{
+                                title: 'Loading Place...'
+                            }}
+                        />
+                    </Stack.Navigator>
+                </NavigationContainer>
+            </SortContext.Provider>
         </>
     );
 }

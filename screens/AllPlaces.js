@@ -1,23 +1,26 @@
 import PlacesList from "../components/Places/PlacesList";
-import {useEffect, useState} from "react";
+import React, { useContext, useEffect, useState } from 'react';
 import {useIsFocused} from "@react-navigation/native";
 import {fetchPlaces, init} from "../util/database";
 import {Alert, StyleSheet, View} from "react-native";
 import {Colors} from "../constants/colors";
 import Filters from "../util/Filters";
+import { SortContext} from "../util/SortContext";
 
 function AllPlaces({ route }) {
+    const { sort, setSort } = useContext(SortContext);
     const [loadedPlaces, setLoadedPlaces] = useState([]);
     const isFocused = useIsFocused();
     const [filter, setFilter] = useState({ city: [], country: []});
     const [cities, setCities] = useState([]);
     const [countries, setCountries] = useState([]);
 
+
     useEffect(() => {
         async function loadPlaces() {
             try {
                 await init();
-                const places = await fetchPlaces(filter);
+                const places = await fetchPlaces(filter, sort);
                 setLoadedPlaces(places)
                 console.log('logPlaces',places[0])
                 const uniqueCities = [...new Set(places.map(place => place.city))];
@@ -38,7 +41,7 @@ function AllPlaces({ route }) {
             loadPlaces();
             /*setLoadedPlaces(curPlaces => [...curPlaces, route.params.place]);*/
         }
-    }, [isFocused, filter]);
+    }, [isFocused, filter, sort]);
 
     const deletePlaceHandler = (id) => {
         setLoadedPlaces(places => places.filter(place => place.id !== id));

@@ -1,8 +1,8 @@
-import React from 'react';
 import {Alert, Image, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import {Colors} from "../../constants/colors";
 import {GestureHandlerRootView, RectButton, Swipeable} from 'react-native-gesture-handler';
 import {Ionicons} from '@expo/vector-icons';
+import formatDate from "../../util/FormatDate";
 
 function PlaceItem({ place, onSelect, onDelete }) {
     const handleDelete = () => {
@@ -44,7 +44,7 @@ function PlaceItem({ place, onSelect, onDelete }) {
                     <View style={styles.info}>
                         <Text style={styles.title}>{place.title}</Text>
                         <Text style={styles.address}>{place.address}</Text>
-                        <Text style={styles.title}>{place.date}</Text>
+                        <Text style={styles.title}>{formatDate(place.date)}</Text>
                         <Text style={styles.title}>{place.countryFlagEmoji} {place.city}</Text>
                     </View>
                 </TouchableOpacity>
