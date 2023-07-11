@@ -1,28 +1,52 @@
 import MapView, {Marker} from "react-native-maps";
 import {ActivityIndicator, Alert, Linking, StyleSheet, View} from "react-native";
-import {useCallback, useLayoutEffect, useState} from "react";
+import {useCallback, useEffect, useLayoutEffect, useState} from "react";
 import IconButton from "../components/UI/IconButton";
 import {getCurrentPositionAsync, PermissionStatus, requestForegroundPermissionsAsync} from 'expo-location';
 
 function Map({ navigation, route }) {
-    const initialLocation = route.params && {
-        lat: route.params.initialLat,
-        lng: route.params.initialLng,
-    }
-    const [selectedLocation, setSelectedLocation] = useState(initialLocation);
+    const [selectedLocation, setSelectedLocation] = useState();
     const [isLoading, setIsLoading] = useState(false);
     const [locationPermissionInformation, setLocationPermissionInformation] = useState(null);
-
-
     const [region, setRegion] = useState({
-        latitude: initialLocation ? initialLocation.lat : 37.50,
-        longitude: initialLocation ? initialLocation.lng : -122.33,
+        latitude: 52.520008,
+        longitude: 13.404954,
         latitudeDelta: 0.0922,
         longitudeDelta: 0.0421,
     });
 
+    const initialLat = route.params && route.params.initialLat;
+    const initialLng = route.params && route.params.initialLng;
+    const currentSetLocationLat = route.params && route.params.currentSetLocationLat;
+    const currentSetLocationLng = route.params && route.params.currentSetLocationLng;
+    //currentSetLocation || initial
+    useEffect(() => {
+        let newLat, newLng;
+        if (currentSetLocationLat && currentSetLocationLng) {
+            newLat = currentSetLocationLat;
+            newLng = currentSetLocationLng;
+        } else if (initialLat && initialLng) {
+            newLat = initialLat;
+            newLng = initialLng;
+        }
+
+        if (newLat && newLng) {
+            setRegion({
+                latitude: newLat,
+                longitude: newLng,
+                latitudeDelta: 0.0922,
+                longitudeDelta: 0.0421,
+            });
+            setSelectedLocation({
+                lat: newLat,
+                lng: newLng,
+
+            })
+        }
+    }, [currentSetLocationLat, currentSetLocationLng, initialLat, initialLng]);
+
     function selectLocationHandler(event) {
-        if (initialLocation) {
+        if (initialLat && initialLng) {
             return;
         }
         const lat = event.nativeEvent.coordinate.latitude;
@@ -52,7 +76,7 @@ function Map({ navigation, route }) {
 
     useLayoutEffect(() => {
         //if got initial location header button will not be shown
-        if (initialLocation) {
+        if (initialLat && initialLng) {
             return;
         }
         navigation.setOptions({
@@ -64,7 +88,7 @@ function Map({ navigation, route }) {
                     onPress={savePickedLocationHandler}
                 />
         });
-    }, [navigation, savePickedLocationHandler, initialLocation]);
+    }, [navigation, savePickedLocationHandler, initialLat, initialLng]);
 
     const verifyPermissions = async () => {
         const { status } = await requestForegroundPermissionsAsync();
@@ -73,12 +97,13 @@ function Map({ navigation, route }) {
     };
 
     useLayoutEffect(() => {
-        if (!initialLocation) {
+        if (!initialLat && !initialLng && !currentSetLocationLat && !currentSetLocationLng) {
             const fetchCurrentLocation = async () => {
                 const hasPermission = await verifyPermissions(); // Invoke hasPermission function
                 function openSettings() {
                     Linking.openSettings();
                 }
+
                 if (!hasPermission) { // Change the condition here
                     Alert.alert(
                         'Insufficient Permissions',
@@ -117,7 +142,7 @@ function Map({ navigation, route }) {
 
             fetchCurrentLocation();
         }
-    }, [initialLocation]);
+    }, []);
     if (isLoading) {
         return (
             <View style={styles.loadingContainer}>

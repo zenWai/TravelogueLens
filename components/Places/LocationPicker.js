@@ -6,7 +6,7 @@ import {getMapPreview} from "../../util/location";
 import {useCallback, useEffect, useState} from "react";
 import {useIsFocused, useNavigation, useRoute} from "@react-navigation/native";
 
-function LocationPicker({ onLocationPick }) {
+function LocationPicker({ location, onLocationPick }) {
     const [pickedLocation, setPickedLocation] = useState();
     const [locationPermissionInformation, requestPermission] = useForegroundPermissions();
     const navigation = useNavigation();
@@ -24,7 +24,14 @@ function LocationPicker({ onLocationPick }) {
             setPickedLocation(mapPickedLocation);
         }
     }, [route, isFocused]);
-
+    useEffect(() => {
+        if (location && (location.lat !== pickedLocation?.lat || location.lng !== pickedLocation?.lng)) {
+            setLoadingLocation(true);
+            console.log(location)
+            setPickedLocation(location);
+            setLoadingLocation(false);
+        }
+    }, [location]);
 
     useEffect(() => {
         async function handleLocation() {
@@ -96,7 +103,15 @@ function LocationPicker({ onLocationPick }) {
     }
 
     function pickOnMapHandler() {
-        navigation.navigate('Map');
+        if(pickedLocation){
+            navigation.navigate('Map', {
+                currentSetLocationLat: pickedLocation.lat,
+                currentSetLocationLng: pickedLocation.lng,
+            });
+        } else {
+            navigation.navigate('Map');
+        }
+
     }
 
     let locationPreview = <Text>No location picked yet.</Text>
