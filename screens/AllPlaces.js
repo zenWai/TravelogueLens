@@ -70,6 +70,7 @@ function AllPlaces({ route, navigation }) {
 
     return (
         <View style={styles.container}>
+            {loadedPlaces.length > 0 &&
             <View>
                 <Filters
                     onChange={handleFilterChange}
@@ -80,12 +81,15 @@ function AllPlaces({ route, navigation }) {
                     ]}
                 />
             </View>
+            }
+            {loadedPlaces.length > 0 &&
             <View>
                 <OutlinedButton onPress={() => {
                     navigation.navigate('GalleryScreen', { places: loadedPlaces })
 
                 }} children="Images Gallery" icon="images-outline"/>
             </View>
+            }
             <PlacesList places={loadedPlaces}
                         onDelete={deletePlaceHandler}/>
         </View>
