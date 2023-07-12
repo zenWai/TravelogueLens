@@ -1,18 +1,17 @@
 import PlacesList from "../components/Places/PlacesList";
-import React, { useContext, useState } from 'react';
-import {useFocusEffect, useIsFocused} from "@react-navigation/native";
+import React, {useContext, useState} from 'react';
+import {useFocusEffect} from "@react-navigation/native";
 import {fetchPlaces, init} from "../util/database";
 import {StyleSheet, View} from "react-native";
 import {Colors} from "../constants/colors";
 import Filters from "../util/Filters";
-import { SortContext} from "../util/SortContext";
+import {SortContext} from "../util/SortContext";
 import OutlinedButton from "../components/UI/OutlinedButton";
 
 function AllPlaces({ route, navigation }) {
     const { sort, setSort } = useContext(SortContext);
     const [loadedPlaces, setLoadedPlaces] = useState([]);
-    const isFocused = useIsFocused();
-    const [filter, setFilter] = useState({ city: [], country: []});
+    const [filter, setFilter] = useState({ city: [], country: [] });
     const [cities, setCities] = useState([]);
     const [countries, setCountries] = useState([]);
 
@@ -39,12 +38,12 @@ function AllPlaces({ route, navigation }) {
                 }
             }
 
-            if (isFocused) {
-                loadPlaces();
-                /*setLoadedPlaces(curPlaces => [...curPlaces, route.params.place]);*/
-            }
 
-    }, [filter, sort]));
+            loadPlaces();
+            /*setLoadedPlaces(curPlaces => [...curPlaces, route.params.place]);*/
+
+
+        }, [filter, sort]));
 
     const deletePlaceHandler = (id) => {
         setLoadedPlaces(places => places.filter(place => place.id !== id));
@@ -72,14 +71,14 @@ function AllPlaces({ route, navigation }) {
     return (
         <View style={styles.container}>
             <View>
-            <Filters
-                onChange={handleFilterChange}
-                selections={[filter.country, filter.city]}
-                filters={[
-                    countries.map(countryObj => `${countryObj.flag} ${countryObj.country}`),
-                    [...cities],
-                ]}
-            />
+                <Filters
+                    onChange={handleFilterChange}
+                    selections={[filter.country, filter.city]}
+                    filters={[
+                        countries.map(countryObj => `${countryObj.flag} ${countryObj.country}`),
+                        [...cities],
+                    ]}
+                />
             </View>
             <View>
                 <OutlinedButton onPress={() => {

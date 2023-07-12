@@ -59,11 +59,9 @@ export function getNearbyPointsOfInterest(lat, lng, maxResults) {
             const nearbyPOIs =
                 data.results
                     .filter(place =>
-                        place.types.includes(
-                            'point_of_interest') ||
-                        place.types.includes(
-                            'tourist_attraction'
-                        ))
+                        place.types.includes('point_of_interest') || place.types.includes('tourist_attraction') &&
+                        !place.types.includes('lodging') && !place.types.includes('store') && !place.types.includes('health') &&
+                        !place.types.includes('finance') && !place.types.includes('post_office'))
                     .slice(0, maxResults) // Limit the number of results
                     .map(place => {
                         return {

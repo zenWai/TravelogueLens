@@ -136,7 +136,7 @@ export function updatePOIS(placeId, nearbyPOIS, poiPhotoPaths) {
     return promise;
 }
 
-export function fetchPlaces(filter = {}, sort ) {
+export function fetchPlaces(filter = {}, sort) {
     // Filter Logic
     const { country, city } = filter;
     const params = [];

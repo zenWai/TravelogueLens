@@ -50,8 +50,8 @@ function PlaceForm({ onCreatePlace }) {
             onLocationPickHandler(location);
             setLocationPicked(location);
         }
-        console.log('form data',formattedDate)
-        if(formattedDate) {
+        console.log('form data', formattedDate)
+        if (formattedDate) {
             setGotFormatedDate(formattedDate)
         }
     }
@@ -59,7 +59,6 @@ function PlaceForm({ onCreatePlace }) {
     const onLocationPickHandler = useCallback((location) => {
         setLocationPicked(location);
     }, []);
-
 
 
     return (

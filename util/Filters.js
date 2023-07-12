@@ -1,4 +1,4 @@
-import {TouchableOpacity, View, Text, StyleSheet, ScrollView} from "react-native";
+import {ScrollView, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import {useRef} from "react";
 import {Colors} from "../constants/colors";
 
@@ -33,7 +33,8 @@ const Filters = ({ onChange, selections, filters }) => {
                                 borderRadius: 17,
                             }}>
                             <View>
-                                <Text style={{ color: selections[index].includes(index === 0 ? filter.split(" ").slice(1).join(" ") : filter) ? 'black' : 'white' }}>
+                                <Text
+                                    style={{ color: selections[index].includes(index === 0 ? filter.split(" ").slice(1).join(" ") : filter) ? 'black' : 'white' }}>
                                     {filter}
                                 </Text>
                             </View>

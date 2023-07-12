@@ -20,10 +20,10 @@ function InterestingFactsCities({ city }) {
 
     return (
         <>
-        <View style={styles.ContainerSeparator}></View>
-        <View>
-            <Text style={styles.address}>{facts}</Text>
-        </View>
+            <View style={styles.ContainerSeparator}></View>
+            <View>
+                <Text style={styles.address}>{facts}</Text>
+            </View>
         </>
     );
 }

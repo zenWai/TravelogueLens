@@ -103,7 +103,7 @@ function LocationPicker({ location, onLocationPick }) {
     }
 
     function pickOnMapHandler() {
-        if(pickedLocation){
+        if (pickedLocation) {
             navigation.navigate('Map', {
                 currentSetLocationLat: pickedLocation.lat,
                 currentSetLocationLng: pickedLocation.lng,

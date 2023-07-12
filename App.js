@@ -10,10 +10,9 @@ import PlaceDetails from "./screens/PlaceDetails";
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs'
 import SettingsScreen from "./screens/SettingsScreen";
 import {Ionicons} from "@expo/vector-icons";
-import {showSortOptions} from "./util/SortContext";
+import {showSortOptions, SortContext} from "./util/SortContext";
 import {View} from "react-native";
 import React, {useContext, useState} from "react";
-import {SortContext} from "./util/SortContext";
 import GalleryScreen from "./screens/GalleryScreen";
 
 const Stack = createNativeStackNavigator();

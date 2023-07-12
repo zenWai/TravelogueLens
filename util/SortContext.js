@@ -1,9 +1,10 @@
-import React, { createContext } from "react";
+import React, {createContext} from "react";
 import {Alert} from "react-native";
 
 export const SortContext = createContext({
     sort: null,
-    setSort: () => {},
+    setSort: () => {
+    },
 });
 
 export function showSortOptions(onSelect) {

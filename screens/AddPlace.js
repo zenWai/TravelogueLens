@@ -20,7 +20,7 @@ function AddPlace({ navigation }) {
             const countryCode = infoFromLocation.countryCode;
             console.log('countryCode', countryCode);
             const city = infoFromLocation.city;
-            if(!city || !country) {
+            if (!city || !country) {
                 Alert.alert(
                     'Location not found or too rural',
                     'You can pick a nearby location on your map'

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Dimensions, Text, View, Image } from 'react-native';
+import {Dimensions, Image, Text, View} from 'react-native';
 import Carousel from 'react-native-reanimated-carousel';
 import {GestureHandlerRootView} from "react-native-gesture-handler";
 import {Ionicons} from "@expo/vector-icons";
@@ -26,29 +26,32 @@ function GalleryScreen({ navigation, route }) {
                 scrollAnimationDuration={1000}
                 onSnapToItem={(index) => {
                     console.log('current index:', index);
-                    navigation.setOptions({ title: `${places[index].countryFlagEmoji} ${places[index].city} - ${places[index].title}`  });
+                    navigation.setOptions({ title: `${places[index].countryFlagEmoji} ${places[index].city} - ${places[index].title}` });
                 }}
-                renderItem={({ item } ) => (
+                renderItem={({ item }) => (
                     <View style={{
-                            flex: 1,
-                            width: '100%',
-                            height: '100%',
-                        }}
+                        flex: 1,
+                        width: '100%',
+                        height: '100%',
+                    }}
                     >
                         <Image source={{ uri: item.imageUri }} style={{ width: '100%', height: '100%' }}/>
 
                         <View style={{
-                                position: 'absolute',
-                                bottom: 0,
-                                left: 0,
-                                width: '100%',
-                                backgroundColor: 'rgba(0,0,0,0.5)', // semi-transparent black background
-                                zIndex: 1,
-                                padding: 10,
-                                alignItems: 'center',
-                            }}
+                            position: 'absolute',
+                            bottom: 0,
+                            left: 0,
+                            width: '100%',
+                            backgroundColor: 'rgba(0,0,0,0.5)', // semi-transparent black background
+                            zIndex: 1,
+                            padding: 10,
+                            alignItems: 'center',
+                        }}
                         >
-                            <Text style={{ color: 'white', fontSize: 20 }}>{`${item.countryFlagEmoji} ${item.city} - ${item.title}`}</Text>
+                            <Text style={{
+                                color: 'white',
+                                fontSize: 20
+                            }}>{`${item.countryFlagEmoji} ${item.city} - ${item.title}`}</Text>
                         </View>
                     </View>
                 )}
@@ -65,7 +68,7 @@ function GalleryScreen({ navigation, route }) {
                     navigation.goBack()
                 }}/>
             </View>
-</GestureHandlerRootView>
+        </GestureHandlerRootView>
     );
 }
 

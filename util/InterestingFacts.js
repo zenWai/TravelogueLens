@@ -1,4 +1,5 @@
 import {API_KEY} from '@env'
+
 export function InterestingFacts(city) {
     return fetch('https://api.openai.com/v1/chat/completions', {
         method: 'POST',
@@ -9,8 +10,11 @@ export function InterestingFacts(city) {
         body: JSON.stringify({
             model: 'gpt-3.5-turbo',
             messages: [
-                {role: 'system', content: 'You are a travel guide'},
-                {role: 'user', content: `In less than 200 letters please tell me an intriguing geographical fact about the city of ${city} that a traveler would find fascinating.`}
+                { role: 'system', content: 'You are a travel guide' },
+                {
+                    role: 'user',
+                    content: `In less than 200 letters please tell me an intriguing geographical fact about the city of ${city} that a traveler would find fascinating.`
+                }
             ],
             max_tokens: 88,
         }),

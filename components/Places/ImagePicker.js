@@ -1,6 +1,12 @@
 import {ActivityIndicator, Alert, Image, Linking, Platform, StyleSheet, Text, View} from "react-native";
-import {launchCameraAsync, PermissionStatus, useCameraPermissions, launchImageLibraryAsync, useMediaLibraryPermissions, MediaTypeOptions} from "expo-image-picker";
-import * as MediaLibrary from 'expo-media-library';
+import {
+    launchCameraAsync,
+    launchImageLibraryAsync,
+    MediaTypeOptions,
+    PermissionStatus,
+    useCameraPermissions,
+    useMediaLibraryPermissions
+} from "expo-image-picker";
 import {useState} from "react";
 import {Colors} from "../../constants/colors";
 import OutlinedButton from "../UI/OutlinedButton";
@@ -44,7 +50,7 @@ function ImagePicker({ onImageTaken }) {
 
     async function verifyPermissionsLibrary() {
 
-        if(mediaLibraryPermissionInformation.status === PermissionStatus.UNDETERMINED) {
+        if (mediaLibraryPermissionInformation.status === PermissionStatus.UNDETERMINED) {
             const permissionMLResponse = await requestMLPermission();
             return permissionMLResponse.granted;
         }
@@ -150,7 +156,7 @@ function ImagePicker({ onImageTaken }) {
                     if (image.assets[0].exif.GPSLongitudeRef === 'W') lng = -lng;
                 }
                 //date
-                let formattedDate='';
+                let formattedDate = '';
                 if ("DateTimeOriginal" in image.assets[0].exif) {
                     const dateTimeOriginal = image.assets[0].exif.DateTimeOriginal; // "2023:04:03 19:42:39"
                     const date = dateTimeOriginal.split(' ')[0]; // "2023:04:03"
@@ -168,7 +174,7 @@ function ImagePicker({ onImageTaken }) {
                 console.log('lat', lat);
                 console.log('lng', lng);
                 setPickedImage(image.assets);
-                if(formattedDate !== '') {
+                if (formattedDate !== '') {
                     onImageTaken(image.assets, { lat, lng }, formattedDate);
                 } else {
                     onImageTaken(image.assets);
