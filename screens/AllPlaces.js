@@ -1,13 +1,14 @@
 import PlacesList from "../components/Places/PlacesList";
-import React, { useContext, useEffect, useState } from 'react';
-import {useIsFocused} from "@react-navigation/native";
+import React, { useContext, useState } from 'react';
+import {useFocusEffect, useIsFocused} from "@react-navigation/native";
 import {fetchPlaces, init} from "../util/database";
-import {Alert, StyleSheet, View} from "react-native";
+import {StyleSheet, View} from "react-native";
 import {Colors} from "../constants/colors";
 import Filters from "../util/Filters";
 import { SortContext} from "../util/SortContext";
+import OutlinedButton from "../components/UI/OutlinedButton";
 
-function AllPlaces({ route }) {
+function AllPlaces({ route, navigation }) {
     const { sort, setSort } = useContext(SortContext);
     const [loadedPlaces, setLoadedPlaces] = useState([]);
     const isFocused = useIsFocused();
@@ -16,32 +17,34 @@ function AllPlaces({ route }) {
     const [countries, setCountries] = useState([]);
 
 
-    useEffect(() => {
-        async function loadPlaces() {
-            try {
-                await init();
-                const places = await fetchPlaces(filter, sort);
-                setLoadedPlaces(places)
-                console.log('logPlaces',places[0])
-                const uniqueCities = [...new Set(places.map(place => place.city))];
-                const uniqueCountries = [...new Set(places.map(place => place.country))];
-                const countryObjects = uniqueCountries.map(country => {
-                    const flag = places.find(place => place.country === country).countryFlagEmoji;
-                    return { country, flag };
-                });
-                setCountries(countryObjects);
+    useFocusEffect(
+        React.useCallback(() => {
+            async function loadPlaces() {
+                try {
+                    await init();
+                    const places = await fetchPlaces(filter, sort);
+                    setLoadedPlaces(places)
+                    console.log('logPlaces', places[0])
+                    const uniqueCities = [...new Set(places.map(place => place.city))];
+                    const uniqueCountries = [...new Set(places.map(place => place.country))];
+                    const countryObjects = uniqueCountries.map(country => {
+                        const flag = places.find(place => place.country === country).countryFlagEmoji;
+                        return { country, flag };
+                    });
+                    setCountries(countryObjects);
 
-                setCities(uniqueCities);
-            } catch (error) {
-                console.log('Error loading places:', error);
+                    setCities(uniqueCities);
+                } catch (error) {
+                    console.log('Error loading places:', error);
+                }
             }
-        }
 
-        if (isFocused) {
-            loadPlaces();
-            /*setLoadedPlaces(curPlaces => [...curPlaces, route.params.place]);*/
-        }
-    }, [isFocused, filter, sort]);
+            if (isFocused) {
+                loadPlaces();
+                /*setLoadedPlaces(curPlaces => [...curPlaces, route.params.place]);*/
+            }
+
+    }, [filter, sort]));
 
     const deletePlaceHandler = (id) => {
         setLoadedPlaces(places => places.filter(place => place.id !== id));
@@ -77,6 +80,12 @@ function AllPlaces({ route }) {
                     [...cities],
                 ]}
             />
+            </View>
+            <View>
+                <OutlinedButton onPress={() => {
+                    navigation.navigate('GalleryScreen', { places: loadedPlaces })
+
+                }} children="Images Gallery" icon="images-outline"/>
             </View>
             <PlacesList places={loadedPlaces}
                         onDelete={deletePlaceHandler}/>

@@ -7,6 +7,7 @@ import ReviewsList from "../components/Places/PointOfInterestReviews";
 import {fetchPointOfInterestReviews, getNearbyPointsOfInterest} from "../util/location";
 import PointsOfInterest from "../components/Places/PointsOfInterest";
 import formatDate from "../util/FormatDate";
+import InterestingFactsCities from "../components/Places/InterestingFactsCities";
 
 function PlaceDetails({ route, navigation }) {
     const [fetchedPlace, setFetchedPlace] = useState();
@@ -100,6 +101,7 @@ function PlaceDetails({ route, navigation }) {
                 <Text style={styles.address}>{fetchedPlace.countryFlagEmoji} {fetchedPlace.country}</Text>
                 <View style={styles.addressContainer}>
                     <Text style={styles.address}>{fetchedPlace.address}</Text>
+                    <InterestingFactsCities city={fetchedPlace.city}/>
                 </View>
                 <OutlinedButton
                     icon="map"

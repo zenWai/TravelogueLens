@@ -4,6 +4,7 @@ import {getAddress, getNearbyPointsOfInterest} from "../util/location";
 import {useState} from "react";
 import {ActivityIndicator, Alert, StyleSheet, View} from "react-native";
 import {Colors} from "../constants/colors";
+import * as FileSystem from 'expo-file-system';
 
 function AddPlace({ navigation }) {
     const [isLoading, setIsLoading] = useState(false);
@@ -37,7 +38,14 @@ function AddPlace({ navigation }) {
                     poiPhotoPaths.push(path);
                 }
             }
-
+            const newImageUri = FileSystem.documentDirectory + place.imageUri.split('/').pop();
+            await FileSystem.copyAsync({
+                from: place.imageUri,
+                to: newImageUri,
+            });
+            console.log('New image URI:', newImageUri);
+            place.imageUri = newImageUri;
+            console.log(place.date)
 
             const newPlace = {
                 ...place,

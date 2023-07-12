@@ -14,6 +14,7 @@ import {showSortOptions} from "./util/SortContext";
 import {View} from "react-native";
 import React, {useContext, useState} from "react";
 import {SortContext} from "./util/SortContext";
+import GalleryScreen from "./screens/GalleryScreen";
 
 const Stack = createNativeStackNavigator();
 const BottomTabs = createBottomTabNavigator();
@@ -68,7 +69,7 @@ function HomeTabs() {
                     title: 'Settings',
                     tabBarLabel: 'Settings',
                     tabBarIcon: ({ color, size }) => (
-                        <Ionicons name="earth-outline" size={size} color={color}/>
+                        <Ionicons name="settings-outline" size={size} color={color}/>
                     ),
                 }}
             />
@@ -110,6 +111,7 @@ export default function App() {
                                 title: 'Loading Place...'
                             }}
                         />
+                        <Stack.Screen name="GalleryScreen" component={GalleryScreen}/>
                     </Stack.Navigator>
                 </NavigationContainer>
             </SortContext.Provider>

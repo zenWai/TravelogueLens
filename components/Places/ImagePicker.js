@@ -11,14 +11,10 @@ function ImagePicker({ onImageTaken }) {
     const [pickedImage, setPickedImage] = useState();
     const [loadingPicture, setLoadingPicture] = useState(false);
 
-    async function verifyPermissions() {
+    async function verifyPermissionsCamera() {
         if (cameraPermissionInformation.status === PermissionStatus.UNDETERMINED) {
             const permissionResponse = await requestPermission();
             return permissionResponse.granted;
-        }
-        if(mediaLibraryPermissionInformation.status === PermissionStatus.UNDETERMINED) {
-            const permissionMLResponse = await requestMLPermission();
-            return permissionMLResponse.granted;
         }
 
         function openSettings() {
@@ -42,6 +38,21 @@ function ImagePicker({ onImageTaken }) {
             );
             return false;
         }
+
+        return true;
+    }
+
+    async function verifyPermissionsLibrary() {
+
+        if(mediaLibraryPermissionInformation.status === PermissionStatus.UNDETERMINED) {
+            const permissionMLResponse = await requestMLPermission();
+            return permissionMLResponse.granted;
+        }
+
+        function openSettings() {
+            Linking.openSettings();
+        }
+
         if (mediaLibraryPermissionInformation.status === PermissionStatus.DENIED) {
             Alert.alert(
                 'Insufficient Permissions',
@@ -64,7 +75,7 @@ function ImagePicker({ onImageTaken }) {
     }
 
     async function takeImageHandler() {
-        const hasPermission = await verifyPermissions();
+        const hasPermission = await verifyPermissionsCamera();
         if (!hasPermission) {
             return;
         }
@@ -90,18 +101,22 @@ function ImagePicker({ onImageTaken }) {
         } finally {
             setLoadingPicture(false);
         }
+        console.log(image.assets)
+        console.log(image.assets[0])
+        console.log(image.assets[0].uri)
+        console.log(image.assets[0].fileName)
 
     }
 
     async function selectImageHandler() {
-        const hasPermission = await verifyPermissions();
+        const hasPermission = await verifyPermissionsLibrary();
         if (!hasPermission) {
             return;
         }
 
         setLoadingPicture(true);
         const image = await launchImageLibraryAsync({
-            allowsEditing: Platform.OS === 'android',
+            allowsEditing: false,
             quality: 1,
             mediaTypes: MediaTypeOptions.Images,
             exif: true,
@@ -134,14 +149,32 @@ function ImagePicker({ onImageTaken }) {
                     if (image.assets[0].exif.GPSLatitudeRef === 'S') lat = -lat;
                     if (image.assets[0].exif.GPSLongitudeRef === 'W') lng = -lng;
                 }
+                //date
+                let formattedDate='';
+                if ("DateTimeOriginal" in image.assets[0].exif) {
+                    const dateTimeOriginal = image.assets[0].exif.DateTimeOriginal; // "2023:04:03 19:42:39"
+                    const date = dateTimeOriginal.split(' ')[0]; // "2023:04:03"
+                    formattedDate = date.replace(/:/g, '-'); // "2023-04-03"
+                } else if ("DateTimeDigitized" in image.assets[0].exif) {
+                    const DateTimeDigitized = image.assets[0].exif.DateTimeDigitized; // "2023:04:03 19:42:39"
+                    const date = DateTimeDigitized.split(' ')[0]; // "2023:04:03"
+                    formattedDate = date.replace(/:/g, '-'); // "2023-04-03"
+                } else if ("DateTime" in image.assets[0].exif) {
+                    console.log('in DateTime exif/app crash?');
+                    const DateTime = image.assets[0].exif.DateTime; // "2023:04:03 19:42:39"
+                    const date = DateTime.split(' ')[0]; // "2023:04:03"
+                    formattedDate = date.replace(/:/g, '-'); // "2023-04-03"
+                }
                 console.log('lat', lat);
                 console.log('lng', lng);
                 setPickedImage(image.assets);
-                if(lat !== 0 && lng !== 0) {
-                    onImageTaken(image.assets, { lat, lng });
+                if(formattedDate !== '') {
+                    onImageTaken(image.assets, { lat, lng }, formattedDate);
                 } else {
                     onImageTaken(image.assets);
                 }
+                //date
+
             }
         } catch (error) {
             console.log('error picking image', error);
