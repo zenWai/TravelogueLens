@@ -1,7 +1,7 @@
 import PlacesList from "../components/Places/PlacesList";
 import React, {useContext, useState} from 'react';
 import {useFocusEffect} from "@react-navigation/native";
-import {fetchPlaces, init} from "../util/database";
+import {deletePlace, fetchPlaces, init} from "../util/database";
 import {StyleSheet, View} from "react-native";
 import {Colors} from "../constants/colors";
 import Filters from "../util/Filters";
@@ -15,38 +15,43 @@ function AllPlaces({ route, navigation }) {
     const [cities, setCities] = useState([]);
     const [countries, setCountries] = useState([]);
 
+    const loadPlaces = async () => {
+        try {
+            await init();
+            const places = await fetchPlaces(filter, sort);
+            setLoadedPlaces(places)
+            console.log('logPlaces', places[0])
+            const uniqueCities = [...new Set(places.map(place => place.city))];
+            const uniqueCountries = [...new Set(places.map(place => place.country))];
+            const countryObjects = uniqueCountries.map(country => {
+                const flag = places.find(place => place.country === country).countryFlagEmoji;
+                return { country, flag };
+            });
+            setCountries(countryObjects);
+
+            setCities(uniqueCities);
+        } catch (error) {
+            console.log('Error loading places:', error);
+        }
+    }
 
     useFocusEffect(
         React.useCallback(() => {
-            async function loadPlaces() {
-                try {
-                    await init();
-                    const places = await fetchPlaces(filter, sort);
-                    setLoadedPlaces(places)
-                    console.log('logPlaces', places[0])
-                    const uniqueCities = [...new Set(places.map(place => place.city))];
-                    const uniqueCountries = [...new Set(places.map(place => place.country))];
-                    const countryObjects = uniqueCountries.map(country => {
-                        const flag = places.find(place => place.country === country).countryFlagEmoji;
-                        return { country, flag };
-                    });
-                    setCountries(countryObjects);
-
-                    setCities(uniqueCities);
-                } catch (error) {
-                    console.log('Error loading places:', error);
-                }
-            }
-
-
             loadPlaces();
-            /*setLoadedPlaces(curPlaces => [...curPlaces, route.params.place]);*/
-
-
-        }, [filter, sort]));
+        }, [filter, sort])
+    );
 
     const deletePlaceHandler = (id) => {
-        setLoadedPlaces(places => places.filter(place => place.id !== id));
+        // Database
+        deletePlace(id)
+            .then(() => {
+                console.log('Place deleted successfully');
+                // reload the data after deletion
+                loadPlaces();
+            })
+            .catch((error) => {
+                console.log('Error deleting place:', error);
+            });
     }
 
     const handleFilterChange = (index, selectedFilter) => {

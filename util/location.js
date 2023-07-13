@@ -48,20 +48,32 @@ export async function getAddress(lat, lng) {
 }
 
 export function getNearbyPointsOfInterest(lat, lng, maxResults) {
-    const radius = 10000; // Search radius in meters
+    const radius = 30000; // Search radius in meters
 
     const url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${lat},${lng}&radius=${radius}&types=point_of_interest|tourist_attraction&key=${GOOGLE_API_KEY}`;
 
     return fetch(url)
         .then(response => response.json())
         .then(data => {
+            const desirableTypes = [
+                'aquarium',
+                'art_gallery',
+                'casino',
+                'movie_theater',
+                'museum',
+                'landmark',
+                'natural_feature',
+                'town_square',
+                'tourist_attraction',
+                'point_of_interest',
+            ];
             // Filter and process the nearby places
             const nearbyPOIs =
                 data.results
                     .filter(place =>
-                        place.types.includes('point_of_interest') || place.types.includes('tourist_attraction') &&
-                        !place.types.includes('lodging') && !place.types.includes('store') && !place.types.includes('health') &&
-                        !place.types.includes('finance') && !place.types.includes('post_office'))
+                        place.types.includes('tourist_attraction')
+                        /*place.types.some(type => desirableTypes.includes(type))*/
+                    )
                     .slice(0, maxResults) // Limit the number of results
                     .map(place => {
                         return {
@@ -73,9 +85,7 @@ export function getNearbyPointsOfInterest(lat, lng, maxResults) {
                             types: place.types.map(type => type.replace(/_/g, ' ')),
                         };
                     });
-
             console.log(nearbyPOIs);
-
             return nearbyPOIs;
         })
         .catch(error => {

@@ -18,7 +18,6 @@ function PlaceDetails({ route, navigation }) {
 
     const selectedPlacedId = route.params.placeId;
 
-    let formattedDate = '';
     useEffect(() => {
         async function loadPlaceData() {
             setIsLoading(true);

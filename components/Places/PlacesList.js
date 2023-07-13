@@ -22,14 +22,7 @@ function PlacesList({ places, onDelete }) {
     }
 
     function onDeleteHandler(id) {
-        deletePlace(id)
-            .then(() => {
-                console.log('Place deleted successfully');
-                onDelete(id);
-            })
-            .catch((error) => {
-                console.log('Error deleting place:', error);
-            });
+        onDelete(id);
     }
 
     return (
