@@ -5,7 +5,7 @@ import {Colors} from "../../constants/colors";
 
 const PointsOfInterest = ({ fetchedPlace, maxResults, handleShowReviews }) => {
     return (
-        fetchedPlace.nearbyPOIS && maxResults > 0 && (
+        fetchedPlace.nearbyPOIS && maxResults > 0 && fetchedPlace.nearbyPOIS.length > 0 && (
             <View style={styles.POIcontainer}>
                 <View style={styles.ContainerSeparator}></View>
                 <Text style={styles.label}>Nearby Points of Interest you might want to visit</Text>

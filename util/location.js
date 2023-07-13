@@ -48,7 +48,7 @@ export async function getAddress(lat, lng) {
 }
 
 export function getNearbyPointsOfInterest(lat, lng, maxResults) {
-    const radius = 30000; // Search radius in meters
+    const radius = 50000; // Search radius in meters
 
     const url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${lat},${lng}&radius=${radius}&types=point_of_interest|tourist_attraction&key=${GOOGLE_API_KEY}`;
 

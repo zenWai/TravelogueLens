@@ -7,7 +7,7 @@ import {
     useCameraPermissions,
     useMediaLibraryPermissions
 } from "expo-image-picker";
-import {useState} from "react";
+import {useCallback, useState} from "react";
 import {Colors} from "../../constants/colors";
 import OutlinedButton from "../UI/OutlinedButton";
 
@@ -17,65 +17,62 @@ function ImagePicker({ onImageTaken }) {
     const [pickedImage, setPickedImage] = useState();
     const [loadingPicture, setLoadingPicture] = useState(false);
 
+    const openSettings = useCallback(() => {
+        Linking.openSettings();
+    }, []);
+
     async function verifyPermissionsCamera() {
-        if (cameraPermissionInformation.status === PermissionStatus.UNDETERMINED) {
+        if (cameraPermissionInformation.status === PermissionStatus.UNDETERMINED || cameraPermissionInformation.status === PermissionStatus.DENIED) {
             const permissionResponse = await requestPermission();
+            if (permissionResponse.status === PermissionStatus.DENIED) {
+                Alert.alert(
+                    'Insufficient Permissions',
+                    'You need to grant camera permissions to use this app',
+                    [
+                        {
+                            text: 'Cancel',
+                            style: 'cancel',
+                        },
+                        {
+                            text: 'Open Settings',
+                            onPress: () => openSettings(),
+                        },
+                    ]
+                );
+                return false;
+            }
             return permissionResponse.granted;
-        }
-
-        function openSettings() {
-            Linking.openSettings();
-        }
-
-        if (cameraPermissionInformation.status === PermissionStatus.DENIED) {
-            Alert.alert(
-                'Insufficient Permissions',
-                'You need to grant camera permissions to use this app',
-                [
-                    {
-                        text: 'Cancel',
-                        style: 'cancel',
-                    },
-                    {
-                        text: 'Open Settings',
-                        onPress: () => openSettings(),
-                    },
-                ]
-            );
-            return false;
         }
 
         return true;
     }
 
     async function verifyPermissionsLibrary() {
-
-        if (mediaLibraryPermissionInformation.status === PermissionStatus.UNDETERMINED) {
+        if (mediaLibraryPermissionInformation.status === PermissionStatus.UNDETERMINED || mediaLibraryPermissionInformation.status === PermissionStatus.DENIED) {
             const permissionMLResponse = await requestMLPermission();
+            if (permissionMLResponse.status === PermissionStatus.DENIED) {
+                Alert.alert(
+                    'Insufficient Permissions',
+                    'You need to grant camera permissions to use this app',
+                    [
+                        {
+                            text: 'Cancel',
+                            style: 'cancel',
+                        },
+                        {
+                            text: 'Open Settings',
+                            onPress: () => openSettings(),
+                        },
+                    ]
+                );
+                return false;
+            }
             return permissionMLResponse.granted;
         }
 
-        function openSettings() {
-            Linking.openSettings();
-        }
 
-        if (mediaLibraryPermissionInformation.status === PermissionStatus.DENIED) {
-            Alert.alert(
-                'Insufficient Permissions',
-                'You need to grant camera permissions to use this app',
-                [
-                    {
-                        text: 'Cancel',
-                        style: 'cancel',
-                    },
-                    {
-                        text: 'Open Settings',
-                        onPress: () => openSettings(),
-                    },
-                ]
-            );
-            return false;
-        }
+
+
 
         return true;
     }
@@ -97,6 +94,10 @@ function ImagePicker({ onImageTaken }) {
             quality: 1,
         });
 
+        if (image.canceled) {
+            setLoadingPicture(false);
+            return;
+        }
         try {
             if (!image.canceled) {
                 setPickedImage(image.assets);

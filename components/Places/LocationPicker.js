@@ -59,28 +59,29 @@ function LocationPicker({ location, onLocationPick }) {
     }, []);
 
     async function verifyPermissions() {
-        if (locationPermissionInformation.status === PermissionStatus.UNDETERMINED) {
+        if (locationPermissionInformation.status === PermissionStatus.UNDETERMINED || locationPermissionInformation.status === PermissionStatus.DENIED) {
             const permissionResponse = await requestPermission();
+            if (permissionResponse.status === PermissionStatus.DENIED) {
+                Alert.alert(
+                    'Insufficient Permissions',
+                    'You need to grant location permissions to use this app',
+                    [
+                        {
+                            text: 'Cancel',
+                            style: 'cancel',
+                        },
+                        {
+                            text: 'Open Settings',
+                            onPress: () => openSettings(),
+                        },
+                    ]
+                );
+                return false;
+            }
             return permissionResponse.granted;
         }
 
-        if (locationPermissionInformation.status === PermissionStatus.DENIED) {
-            Alert.alert(
-                'Insufficient Permissions',
-                'You need to grant location permissions to use this app',
-                [
-                    {
-                        text: 'Cancel',
-                        style: 'cancel',
-                    },
-                    {
-                        text: 'Open Settings',
-                        onPress: () => openSettings(),
-                    },
-                ]
-            );
-            return false;
-        }
+
 
         return true;
     }
