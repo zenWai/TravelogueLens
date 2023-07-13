@@ -46,10 +46,8 @@ function PlaceForm({ onCreatePlace }) {
 
     function onImageTakenHandler(imageUri, location, formattedDate) {
         setImageTaken(imageUri);
-        if (location) {
-            onLocationPickHandler(location);
-            setLocationPicked(location);
-        }
+        onLocationPickHandler(location);
+        setLocationPicked(location);
         console.log('form data', formattedDate)
         if (formattedDate) {
             setGotFormatedDate(formattedDate)

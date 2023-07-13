@@ -76,7 +76,7 @@ function GalleryScreen({ navigation, route }) {
                 padding: 10,
             }}
             >
-                <Ionicons name="backspace-outline" size={34} onPress={() => {
+                <Ionicons name="backspace-outline" size={54} onPress={() => {
                     navigation.goBack()
                 }}/>
             </View>

@@ -179,7 +179,7 @@ function ImagePicker({ onImageTaken }) {
                 if (lat !== 0 && lng !== 0) {
                     location = { lat, lng };
                 }
-
+                console.log(location)
                 onImageTaken(image.assets, location, formattedDate !== '' ? formattedDate : undefined);
                 //date
 

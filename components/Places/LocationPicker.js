@@ -27,9 +27,11 @@ function LocationPicker({ location, onLocationPick }) {
     useEffect(() => {
         if (location && (location.lat !== pickedLocation?.lat || location.lng !== pickedLocation?.lng)) {
             setLoadingLocation(true);
-            console.log(location)
+            console.log('location use effect',location)
             setPickedLocation(location);
             setLoadingLocation(false);
+        } else if (!location || location.lat === 0) {
+            setPickedLocation(undefined)
         }
     }, [location]);
 
@@ -114,10 +116,13 @@ function LocationPicker({ location, onLocationPick }) {
 
     }
 
-    let locationPreview = <Text>No location picked yet.</Text>
-
-    if (pickedLocation) {
+    let locationPreview;
+    if(!pickedLocation || pickedLocation === 0) {
+        locationPreview = <Text>No location picked yet.</Text>
+    }else {
         console.log(1);
+        console.log('pickedLocation', pickedLocation)
+        console.log('location in else',location)
         locationPreview = (
             <Image
                 style={styles.mapPreviewImage}
@@ -127,6 +132,7 @@ function LocationPicker({ location, onLocationPick }) {
             />
         );
     }
+
 
     return (
         <View style={{ flex: 1 }}>
