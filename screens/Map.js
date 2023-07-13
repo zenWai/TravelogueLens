@@ -3,6 +3,7 @@ import {ActivityIndicator, Alert, Linking, StyleSheet, View} from "react-native"
 import {useCallback, useEffect, useLayoutEffect, useState} from "react";
 import IconButton from "../components/UI/IconButton";
 import {getCurrentPositionAsync, PermissionStatus, requestForegroundPermissionsAsync} from 'expo-location';
+import {getAddress} from "../util/location";
 
 function Map({ navigation, route }) {
     const [selectedLocation, setSelectedLocation] = useState();
@@ -57,9 +58,25 @@ function Map({ navigation, route }) {
         });
     }
 
+    async function validateLocation(selectedLocation) {
+        const infoFromLocation = await getAddress(selectedLocation.lat, selectedLocation.lng);
+        const country = infoFromLocation.country;
+        const city = infoFromLocation.city;
+
+        if (!city || !country) {
+            Alert.alert(
+                'Location not found or too rural',
+                'You can pick a nearby location on your map'
+            );
+            return false;
+        }
+
+        return true;
+    }
+
     //avoiding unnecessary render cycles &&|| infinite loops
     //with CallBack,
-    const savePickedLocationHandler = useCallback(() => {
+    const savePickedLocationHandler = useCallback(async () => {
         if (!selectedLocation) {
             Alert.alert(
                 'No location picked!',
@@ -67,11 +84,19 @@ function Map({ navigation, route }) {
             );
             return;
         }
-        navigation.navigate('AddPlace', {
-                pickedLat: selectedLocation.lat,
-                pickedLng: selectedLocation.lng
+        try {
+            const isLocationValid = await validateLocation(selectedLocation);
+            if(isLocationValid) {
+                navigation.navigate('AddPlace', {
+                        pickedLat: selectedLocation.lat,
+                        pickedLng: selectedLocation.lng
+                    }
+                );
             }
-        );
+        } catch (error) {
+            console.log(error);
+        }
+
     }, [navigation, selectedLocation]);
 
     useLayoutEffect(() => {
