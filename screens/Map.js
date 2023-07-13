@@ -86,7 +86,7 @@ function Map({ navigation, route }) {
         }
         try {
             const isLocationValid = await validateLocation(selectedLocation);
-            if(isLocationValid) {
+            if (isLocationValid) {
                 navigation.navigate('AddPlace', {
                         pickedLat: selectedLocation.lat,
                         pickedLng: selectedLocation.lng
