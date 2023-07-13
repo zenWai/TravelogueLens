@@ -3,6 +3,7 @@ import {Dimensions, Image, Text, View} from 'react-native';
 import Carousel from 'react-native-reanimated-carousel';
 import {GestureHandlerRootView} from "react-native-gesture-handler";
 import {Ionicons} from "@expo/vector-icons";
+import ImageModal from "react-native-image-modal";
 
 function GalleryScreen({ navigation, route }) {
     const { places } = route.params;
@@ -14,6 +15,7 @@ function GalleryScreen({ navigation, route }) {
         });
     }, []);
     const width = Dimensions.get('window').width;
+    const screenHeight = Dimensions.get('window').height;
     console.log(places)
     return (
         <GestureHandlerRootView style={{ flex: 1 }}>
@@ -26,7 +28,7 @@ function GalleryScreen({ navigation, route }) {
                 scrollAnimationDuration={1000}
                 onSnapToItem={(index) => {
                     console.log('current index:', index);
-                    navigation.setOptions({ title: `${places[index].countryFlagEmoji} ${places[index].city} - ${places[index].title}` });
+                    /*navigation.setOptions({ title: `${places[index].countryFlagEmoji} ${places[index].city} - ${places[index].title}` });*/
                 }}
                 renderItem={({ item }) => (
                     <View style={{
@@ -35,7 +37,17 @@ function GalleryScreen({ navigation, route }) {
                         height: '100%',
                     }}
                     >
-                        <Image source={{ uri: item.imageUri }} style={{ width: '100%', height: '100%' }}/>
+                        <ImageModal
+                            swipeToDismiss={true}
+                            resizeMode="stretch"
+                            imageBackgroundColor="#000000"
+                            style={{
+                                width: width,
+                                height: screenHeight,
+                                resizeMode: 'stretch',
+                            }}
+                            source={{uri: item.imageUri}}
+                        />
 
                         <View style={{
                             position: 'absolute',

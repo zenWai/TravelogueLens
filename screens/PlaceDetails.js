@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {ActivityIndicator, Image, ScrollView, StyleSheet, Text, View} from "react-native";
+import {ActivityIndicator, Dimensions, Image, Pressable, ScrollView, StyleSheet, Text, View} from "react-native";
 import OutlinedButton from "../components/UI/OutlinedButton";
 import {Colors} from "../constants/colors";
 import {downloadAndSavePOIPhoto, fetchPlaceDetails, getMaxPOIResultsSetting, updatePOIS} from "../util/database";
@@ -8,6 +8,7 @@ import {fetchPointOfInterestReviews, getNearbyPointsOfInterest} from "../util/lo
 import PointsOfInterest from "../components/Places/PointsOfInterest";
 import formatDate from "../util/FormatDate";
 import InterestingFactsCities from "../components/Places/InterestingFactsCities";
+import ImageModal from "react-native-image-modal";
 
 function PlaceDetails({ route, navigation }) {
     const [fetchedPlace, setFetchedPlace] = useState();
@@ -91,10 +92,27 @@ function PlaceDetails({ route, navigation }) {
         setIsReviewVisible(false);
     };
 
-
+    const screenWidth = Dimensions.get('window').width;
+    const screenHeight = Dimensions.get('window').height;
     return (
         <ScrollView>
-            <Image style={styles.image} source={{ uri: fetchedPlace.imageUri }} resizeMode="stretch"/>
+
+
+
+
+            {/*<Image style={styles.image} source={{ uri: fetchedPlace.imageUri }} resizeMode="stretch"/>*/}
+
+            <ImageModal
+                swipeToDismiss={true}
+                resizeMode="stretch"
+                imageBackgroundColor="#000000"
+                style={{
+                    width: screenWidth,
+                    minHeight: 300,
+                }}
+                source={{
+                    uri: fetchedPlace.imageUri}}
+            />
             <View style={styles.locationContainer}>
                 <Text style={styles.address}>{fetchedPlace.city} {formatDate(fetchedPlace.date)}</Text>
                 <Text style={styles.address}>{fetchedPlace.countryFlagEmoji} {fetchedPlace.country}</Text>
