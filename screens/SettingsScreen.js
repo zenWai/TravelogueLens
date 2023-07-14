@@ -1,11 +1,25 @@
-import {Alert, Button, Keyboard, KeyboardAvoidingView, StyleSheet, Text, TextInput} from "react-native";
+import {
+    ActivityIndicator,
+    Alert,
+    Keyboard,
+    KeyboardAvoidingView,
+    StyleSheet,
+    Text,
+    TextInput,
+    View
+} from "react-native";
 import {useEffect, useState} from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {getMaxPOIResultsSetting} from "../util/database";
 import {Colors} from "../constants/colors";
+import fakePlaces from "../util/createFakeInfoPlaces";
+import {createFakeInfo} from "../util/createFakeInfo";
+import OutlinedButton from "../components/UI/OutlinedButton";
 
 function SettingsScreen() {
     const [maxResults, setMaxResults] = useState(5);
+    const [isLoading, setLoading] = useState(false);
+    const [currentProgress, setCurrentProgress] = useState(0);
 
     useEffect(() => {
         getMaxPOIResultsSetting().then(setMaxResults);
@@ -40,6 +54,15 @@ function SettingsScreen() {
         }
     };
 
+    const insertFakePlaces = async () => {
+        setLoading(true);
+        for (let i = 0; i < fakePlaces.length; i++) {
+            await createFakeInfo(fakePlaces[i]);
+            setCurrentProgress(i + 1);
+        }
+        setLoading(false);
+    };
+
     return (
         <KeyboardAvoidingView style={styles.container} behavior="padding">
             <Text style={styles.label}>Max nearby Points of Interest to show:</Text>
@@ -49,7 +72,15 @@ function SettingsScreen() {
                 onChangeText={handleMaxResultsChange}
                 keyboardType="numeric"
             />
-            <Button title="Save" onPress={saveMaxResultsSetting}/>
+            <OutlinedButton children='Save' icon="save-outline" onPress={saveMaxResultsSetting}/>
+            <View style={styles.separator}></View>
+            <OutlinedButton children='Insert Fake Places' icon="globe-outline" onPress={insertFakePlaces}/>
+            {isLoading && (
+                <>
+                    <ActivityIndicator size="large" color="#0000ff"/>
+                    <Text style={{ color: 'white' }}>{`${currentProgress} / ${fakePlaces.length}`}</Text>
+                </>
+            )}
         </KeyboardAvoidingView>
     );
 }
@@ -57,6 +88,11 @@ function SettingsScreen() {
 export default SettingsScreen;
 
 const styles = StyleSheet.create({
+    separator: {
+        height: 1,
+        backgroundColor: Colors.primary200,
+        marginTop: 12,
+    },
     container: {
         flex: 1,
         backgroundColor: Colors.gray700,

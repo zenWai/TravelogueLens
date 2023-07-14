@@ -9,8 +9,8 @@ export const SortContext = createContext({
 
 export function showSortOptions(onSelect) {
     const options = [
-        { text: "Date Ascending (Oldest - Recent)", value: "date_asc" },
-        { text: "Date Descending (Recent - Oldest", value: "date_desc" },
+        { text: "Date (Oldest to Recent)", value: "date_asc" },
+        { text: "Date (Recent to Oldest)", value: "date_desc" },
     ];
 
     Alert.alert(

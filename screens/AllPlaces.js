@@ -2,7 +2,7 @@ import PlacesList from "../components/Places/PlacesList";
 import React, {useContext, useState} from 'react';
 import {useFocusEffect} from "@react-navigation/native";
 import {deletePlace, fetchPlaces, init} from "../util/database";
-import {StyleSheet, View} from "react-native";
+import {ActivityIndicator, StyleSheet, View} from "react-native";
 import {Colors} from "../constants/colors";
 import Filters from "../util/Filters";
 import {SortContext} from "../util/SortContext";
@@ -14,9 +14,11 @@ function AllPlaces({ route, navigation }) {
     const [filter, setFilter] = useState({ city: [], country: [] });
     const [cities, setCities] = useState([]);
     const [countries, setCountries] = useState([]);
+    const [isLoading, setLoading] = useState(false);
 
     const loadPlaces = async () => {
         try {
+            setLoading(true);
             await init();
             const places = await fetchPlaces(filter, sort);
             setLoadedPlaces(places)
@@ -28,10 +30,12 @@ function AllPlaces({ route, navigation }) {
                 return { country, flag };
             });
             setCountries(countryObjects);
-
             setCities(uniqueCities);
+
         } catch (error) {
             console.log('Error loading places:', error);
+        } finally {
+            setLoading(false);
         }
     }
 
@@ -76,27 +80,31 @@ function AllPlaces({ route, navigation }) {
     return (
         <View style={styles.container}>
             {loadedPlaces.length > 0 &&
-            <View>
-                <Filters
-                    onChange={handleFilterChange}
-                    selections={[filter.country, filter.city]}
-                    filters={[
-                        countries.map(countryObj => `${countryObj.flag} ${countryObj.country}`),
-                        [...cities],
-                    ]}
-                />
-            </View>
+                <View>
+                    <Filters
+                        onChange={handleFilterChange}
+                        selections={[filter.country, filter.city]}
+                        filters={[
+                            countries.map(countryObj => `${countryObj.flag} ${countryObj.country}`),
+                            [...cities],
+                        ]}
+                    />
+                </View>
             }
             {loadedPlaces.length > 0 &&
-            <View>
-                <OutlinedButton onPress={() => {
-                    navigation.navigate('GalleryScreen', { places: loadedPlaces })
+                <View>
+                    <OutlinedButton onPress={() => {
+                        navigation.navigate('GalleryScreen', { places: loadedPlaces })
 
-                }} children="Images Gallery" icon="images-outline"/>
-            </View>
+                    }} children="Images Gallery" icon="images-outline"/>
+                </View>
             }
-            <PlacesList places={loadedPlaces}
-                        onDelete={deletePlaceHandler}/>
+            {isLoading ? (
+                <ActivityIndicator size="large" color="#0000ff"/>
+            ) : (
+                <PlacesList places={loadedPlaces}
+                            onDelete={deletePlaceHandler}/>
+            )}
         </View>
     );
 }

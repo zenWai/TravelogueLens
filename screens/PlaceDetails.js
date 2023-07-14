@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {ActivityIndicator, Dimensions, Image, Pressable, ScrollView, StyleSheet, Text, View} from "react-native";
+import {ActivityIndicator, Dimensions, ScrollView, StyleSheet, Text, View} from "react-native";
 import OutlinedButton from "../components/UI/OutlinedButton";
 import {Colors} from "../constants/colors";
 import {downloadAndSavePOIPhoto, fetchPlaceDetails, getMaxPOIResultsSetting, updatePOIS} from "../util/database";
@@ -100,8 +100,6 @@ function PlaceDetails({ route, navigation }) {
         <ScrollView>
 
 
-
-
             {/*<Image style={styles.image} source={{ uri: fetchedPlace.imageUri }} resizeMode="stretch"/>*/}
 
             <ImageModal
@@ -113,7 +111,8 @@ function PlaceDetails({ route, navigation }) {
                     minHeight: 300,
                 }}
                 source={{
-                    uri: fetchedPlace.imageUri}}
+                    uri: fetchedPlace.imageUri
+                }}
             />
             <View style={styles.locationContainer}>
                 <Text style={styles.address}>{fetchedPlace.city} {formatDate(fetchedPlace.date)}</Text>
@@ -121,7 +120,7 @@ function PlaceDetails({ route, navigation }) {
                 <View style={styles.addressContainer}>
                     <Text style={styles.address}>{fetchedPlace.address}</Text>
                     <View style={styles.ContainerSeparator}></View>
-                    <Text style={styles.address}>{fetchedPlace.interestingFact}</Text>
+                    <Text style={styles.fact}>{fetchedPlace.interestingFact}</Text>
                 </View>
                 <OutlinedButton
                     icon="map"
@@ -199,6 +198,11 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         fontWeight: 'bold',
         fontSize: 16,
+    },
+    fact: {
+        color: 'white',
+        textAlign: 'justify',
+        fontSize: 18,
     },
     POIcontainer: {
         flex: 1,

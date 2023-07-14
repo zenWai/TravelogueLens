@@ -4,6 +4,8 @@ import * as FileSystem from 'expo-file-system';
 import {getPOIPhoto} from "./location";
 import countryCodeToEmoji from "./countryCodeToEmoji";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import {placeImages} from "./createFakeInfoPlaces";
+import {Image} from 'react-native';
 
 const database = SQLite.openDatabase('places.db');
 
@@ -107,6 +109,65 @@ export function insertPlace(place) {
         });
     });
 }
+
+/* for FakeInfo */
+export function insertFakePlaces(place) {
+    // formattedDate = YYYY-MM-DD
+
+    let formattedDate;
+    if (place.date == null) {
+        const currentDate = new Date();
+        formattedDate = currentDate.toISOString().split('T')[0];
+    } else {
+        formattedDate = place.date;
+    }
+    const countryFlagEmoji = countryCodeToEmoji(place.countryCode);
+    // expo-sqlite does not support array storing
+    // converting the arrays into JSON strings
+    const nearbyPOISString = JSON.stringify(place.nearbyPOIS);
+    const poiPhotoPathsString = JSON.stringify(place.poiPhotoPaths);
+
+
+    return new Promise((resolve, reject) => {
+        database.transaction((tx) => {
+            tx.executeSql(
+                `INSERT INTO places (title, imageUri, address, lat, lng, date, nearbyPOIS, country, countryFlagEmoji,
+                                     city, poiPhotoPaths, interestingFact)
+                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+                [
+                    place.title,
+                    place.imageUri,
+                    place.address,
+                    place.location.lat,
+                    place.location.lng,
+                    formattedDate,
+                    nearbyPOISString,
+                    place.country,
+                    countryFlagEmoji,
+                    place.city,
+                    poiPhotoPathsString,
+                    place.interestingFact,
+                ],
+                (_, result) => {
+                    console.log("insert place:");
+                    console.log(result);
+                    resolve(result);
+                },
+                (_, error) => {
+                    console.log(error);
+                    reject(error);
+                }
+            );
+        });
+    });
+}
+
+export function getFakeImageURI(placeTitle) {
+    // Return the local URI for the image
+    return Image.resolveAssetSource(placeImages[placeTitle]).uri;
+}
+
+/* for FakeInfo */
 
 export function updatePOIS(placeId, nearbyPOIS, poiPhotoPaths) {
     // Convert the arrays into JSON strings
