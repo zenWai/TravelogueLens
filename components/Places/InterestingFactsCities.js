@@ -3,7 +3,7 @@ import {StyleSheet, Text, View} from "react-native";
 import {useEffect, useState} from "react";
 import {Colors} from "../../constants/colors";
 
-function InterestingFactsCities({ city }) {
+function InterestingFactsCities({ fact }) {
     const [facts, setFacts] = useState('');
 
     useEffect(() => {

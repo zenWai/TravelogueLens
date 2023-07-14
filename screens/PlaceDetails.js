@@ -7,7 +7,6 @@ import ReviewsList from "../components/Places/PointOfInterestReviews";
 import {fetchPointOfInterestReviews, getNearbyPointsOfInterest} from "../util/location";
 import PointsOfInterest from "../components/Places/PointsOfInterest";
 import formatDate from "../util/FormatDate";
-import InterestingFactsCities from "../components/Places/InterestingFactsCities";
 import ImageModal from "react-native-image-modal";
 
 function PlaceDetails({ route, navigation }) {
@@ -25,11 +24,13 @@ function PlaceDetails({ route, navigation }) {
             const result = await getMaxPOIResultsSetting();
             setMaxResults(result);
             const place = await fetchPlaceDetails(selectedPlacedId);
+            console.log('ddddd', place.interestingFact)
             setFetchedPlace(place);
             navigation.setOptions({
                 title: place.title,
             });
             await fetchData(place, result);
+
             setIsLoading(false);
         }
 
@@ -94,6 +95,7 @@ function PlaceDetails({ route, navigation }) {
 
     const screenWidth = Dimensions.get('window').width;
     const screenHeight = Dimensions.get('window').height;
+    console.log('studdddddd', { fetchedPlace })
     return (
         <ScrollView>
 
@@ -118,7 +120,8 @@ function PlaceDetails({ route, navigation }) {
                 <Text style={styles.address}>{fetchedPlace.countryFlagEmoji} {fetchedPlace.country}</Text>
                 <View style={styles.addressContainer}>
                     <Text style={styles.address}>{fetchedPlace.address}</Text>
-                    <InterestingFactsCities city={fetchedPlace.city}/>
+                    <View style={styles.ContainerSeparator}></View>
+                    <Text style={styles.address}>{fetchedPlace.interestingFact}</Text>
                 </View>
                 <OutlinedButton
                     icon="map"
@@ -186,6 +189,10 @@ const styles = StyleSheet.create({
     },
     addressContainer: {
         padding: 20,
+    },
+    ContainerSeparator: {
+        height: 3,
+        backgroundColor: Colors.primary800,
     },
     address: {
         color: Colors.primary500,

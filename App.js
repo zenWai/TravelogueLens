@@ -11,9 +11,10 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs'
 import SettingsScreen from "./screens/SettingsScreen";
 import {Ionicons} from "@expo/vector-icons";
 import {showSortOptions, SortContext} from "./util/SortContext";
-import {View} from "react-native";
+import {SafeAreaView, View} from "react-native";
 import React, {useContext, useState} from "react";
 import GalleryScreen from "./screens/GalleryScreen";
+import {SafeAreaProvider} from "react-native-safe-area-context";
 
 const Stack = createNativeStackNavigator();
 const BottomTabs = createBottomTabNavigator();
@@ -80,7 +81,7 @@ export default function App() {
 
     const [sort, setSort] = useState(null);
     return (
-        <>
+        <SafeAreaProvider>
             <StatusBar style={'dark'}/>
             <SortContext.Provider value={{ sort, setSort }}>
                 <NavigationContainer>
@@ -114,6 +115,6 @@ export default function App() {
                     </Stack.Navigator>
                 </NavigationContainer>
             </SortContext.Provider>
-        </>
+        </SafeAreaProvider>
     );
 }

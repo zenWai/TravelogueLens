@@ -2,8 +2,7 @@ import {GOOGLE_API_KEY} from '@env'
 
 
 export function getMapPreview(lat, lng) {
-    const imagePreviewUrl = `https://maps.googleapis.com/maps/api/staticmap?center=${lat},${lng}&zoom=14&size=400x200&maptype=roadmap&markers=color:red%7Clabel:S%7C${lat},${lng}&key=${GOOGLE_API_KEY}`;
-    return imagePreviewUrl;
+    return `https://maps.googleapis.com/maps/api/staticmap?center=${lat},${lng}&zoom=14&size=400x200&maptype=roadmap&markers=color:red%7Clabel:S%7C${lat},${lng}&key=${GOOGLE_API_KEY}`;
 }
 
 export function getPOIPhoto(photo_reference) {
@@ -48,7 +47,7 @@ export async function getAddress(lat, lng) {
 }
 
 export function getNearbyPointsOfInterest(lat, lng, maxResults) {
-    const radius = 50000; // Search radius in meters
+    const radius = 20000; // Search radius in meters
 
     const url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${lat},${lng}&radius=${radius}&types=point_of_interest|tourist_attraction&key=${GOOGLE_API_KEY}`;
 
@@ -59,7 +58,6 @@ export function getNearbyPointsOfInterest(lat, lng, maxResults) {
                 'aquarium',
                 'art_gallery',
                 'casino',
-                'movie_theater',
                 'museum',
                 'landmark',
                 'natural_feature',
@@ -71,8 +69,8 @@ export function getNearbyPointsOfInterest(lat, lng, maxResults) {
             const nearbyPOIs =
                 data.results
                     .filter(place =>
-                        place.types.includes('tourist_attraction')
-                        /*place.types.some(type => desirableTypes.includes(type))*/
+                        /*place.types.includes('tourist_attraction')*/
+                        place.types.some(type => desirableTypes.includes(type))
                     )
                     .slice(0, maxResults) // Limit the number of results
                     .map(place => {

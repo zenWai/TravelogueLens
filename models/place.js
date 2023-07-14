@@ -1,5 +1,5 @@
 export class Place {
-    constructor(title, imageUri, location, id, date, poiPhotoPaths) {
+    constructor(title, imageUri, location, id, date, poiPhotoPaths, interestingFact) {
         this.title = title;
         this.imageUri = imageUri;
         this.address = location.address;
@@ -11,5 +11,6 @@ export class Place {
         this.countryFlagEmoji = location.countryFlagEmoji;
         this.city = location.city;
         this.poiPhotoPaths = poiPhotoPaths;
+        this.interestingFact = interestingFact;
     }
 }

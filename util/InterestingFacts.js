@@ -1,6 +1,6 @@
 import {API_KEY} from '@env'
 
-export function InterestingFacts(city) {
+export function InterestingFacts(city, country) {
     return fetch('https://api.openai.com/v1/chat/completions', {
         method: 'POST',
         headers: {
@@ -13,7 +13,7 @@ export function InterestingFacts(city) {
                 { role: 'system', content: 'You are a travel guide' },
                 {
                     role: 'user',
-                    content: `In less than 200 letters please tell me an intriguing geographical fact about the city of ${city} that a traveler would find fascinating.`
+                    content: `Please tell me in less than 200 letters an intriguing geographical fact about the city of ${city},${country} that a tourist would find fascinating.`
                 }
             ],
             max_tokens: 88,

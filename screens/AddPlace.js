@@ -5,11 +5,10 @@ import {useState} from "react";
 import {ActivityIndicator, Alert, StyleSheet, View} from "react-native";
 import {Colors} from "../constants/colors";
 import * as FileSystem from 'expo-file-system';
+import {InterestingFacts} from "../util/InterestingFacts";
 
 function AddPlace({ navigation }) {
     const [isLoading, setIsLoading] = useState(false);
-
-    // Results of extracted POIS for that location
 
     async function createPlaceHandler(place) {
         setIsLoading(true);
@@ -31,6 +30,8 @@ function AddPlace({ navigation }) {
             console.log('maxResults', maxResults)
             const nearbyPOIS = await getNearbyPointsOfInterest(place.location.lat, place.location.lng, maxResults);
             console.log(nearbyPOIS)
+            const interestingFact = await InterestingFacts(city, country);
+            console.log('fact: ',interestingFact);
             const poiPhotoPaths = [];
             for (let poi of nearbyPOIS) {
                 if (poi.photo_reference) {
@@ -54,7 +55,8 @@ function AddPlace({ navigation }) {
                 countryCode,
                 city,
                 nearbyPOIS,
-                poiPhotoPaths
+                poiPhotoPaths,
+                interestingFact,
             };
             await insertPlace(newPlace);
             navigation.navigate('AllPlaces');

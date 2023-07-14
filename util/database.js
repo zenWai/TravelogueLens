@@ -8,7 +8,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 const database = SQLite.openDatabase('places.db');
 
 export function init() {
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
         database.transaction((tx) => {
             tx.executeSql(`CREATE TABLE IF NOT EXISTS places
                            (
@@ -23,7 +23,8 @@ export function init() {
                                country          TEXT,
                                city             TEXT,
                                poiPhotoPaths    TEXT,
-                               countryFlagEmoji TEXT
+                               countryFlagEmoji TEXT,
+                               interestingFact  TEXT
                            )`,
                 [],
                 () => {
@@ -53,7 +54,6 @@ export function init() {
             );
         });
     });
-    return promise;
 }
 
 export function insertPlace(place) {
@@ -68,17 +68,18 @@ export function insertPlace(place) {
     console.log('place id:', place.id);
     console.log(place.city)
     console.log(place.country);
+    console.log('in db fact', place.interestingFact);
     const countryFlagEmoji = countryCodeToEmoji(place.countryCode);
     // expo-sqlite does not support array storing
     // converting the arrays into JSON strings
     const nearbyPOISString = JSON.stringify(place.nearbyPOIS);
     const poiPhotoPathsString = JSON.stringify(place.poiPhotoPaths);
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
         database.transaction((tx) => {
             tx.executeSql(
                 `INSERT INTO places (title, imageUri, address, lat, lng, date, nearbyPOIS, country, countryFlagEmoji,
-                                     city, poiPhotoPaths)
-                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+                                     city, poiPhotoPaths, interestingFact)
+                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
                 [
                     place.title,
                     place.imageUri,
@@ -91,6 +92,7 @@ export function insertPlace(place) {
                     countryFlagEmoji,
                     place.city,
                     poiPhotoPathsString,
+                    place.interestingFact,
                 ],
                 (_, result) => {
                     console.log("insert place:");
@@ -104,7 +106,6 @@ export function insertPlace(place) {
             );
         });
     });
-    return promise;
 }
 
 export function updatePOIS(placeId, nearbyPOIS, poiPhotoPaths) {
@@ -112,7 +113,7 @@ export function updatePOIS(placeId, nearbyPOIS, poiPhotoPaths) {
     const nearbyPOISString = JSON.stringify(nearbyPOIS);
     const poiPhotoPathsString = JSON.stringify(poiPhotoPaths);
 
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
         database.transaction((tx) => {
             tx.executeSql(
                 `UPDATE places
@@ -132,8 +133,6 @@ export function updatePOIS(placeId, nearbyPOIS, poiPhotoPaths) {
             );
         });
     });
-
-    return promise;
 }
 
 export function fetchPlaces(filter = {}, sort) {
@@ -164,7 +163,7 @@ export function fetchPlaces(filter = {}, sort) {
     console.log("Query:", query);
     console.log("Params:", params);
 
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
         database.transaction((tx) => {
             tx.executeSql(
                 query,
@@ -185,6 +184,8 @@ export function fetchPlaces(filter = {}, sort) {
                                 },
                                 dp.id,
                                 dp.date,
+                                dp.poiPhotoPaths,
+                                dp.interestingFact,
                             )
                         );
                     }
@@ -196,11 +197,10 @@ export function fetchPlaces(filter = {}, sort) {
                 });
         });
     });
-    return promise;
 }
 
 export function fetchPlaceDetails(id) {
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
         database.transaction((tx) => {
             tx.executeSql(
                 'SELECT * FROM places WHERE id = ?',
@@ -220,8 +220,8 @@ export function fetchPlaceDetails(id) {
                         },
                         dbPlace.id,
                         dbPlace.date,
-                        dbPlace.nearbyPOIS,
                         dbPlace.poiPhotoPaths,
+                        dbPlace.interestingFact,
                     );
                     place.nearbyPOIS = JSON.parse(dbPlace.nearbyPOIS);
                     place.poiPhotoPaths = JSON.parse(dbPlace.poiPhotoPaths);
@@ -234,11 +234,10 @@ export function fetchPlaceDetails(id) {
             );
         });
     });
-    return promise;
 }
 
 export function deletePlace(id) {
-    const promise = new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
         database.transaction((tx) => {
             tx.executeSql(
                 'DELETE FROM places WHERE id = ?',
@@ -252,7 +251,6 @@ export function deletePlace(id) {
             );
         });
     });
-    return promise;
 }
 
 
