@@ -3,8 +3,10 @@ import {Colors} from "../../constants/colors";
 import {GestureHandlerRootView, RectButton, Swipeable} from 'react-native-gesture-handler';
 import {Ionicons} from '@expo/vector-icons';
 import formatDate from "../../util/FormatDate";
+import {useNavigation} from "@react-navigation/native";
 
 function PlaceItem({ place, onSelect, onDelete }) {
+    const navigation = useNavigation();
     const handleDelete = () => {
         Alert.alert(
             "Confirmation",
@@ -21,12 +23,23 @@ function PlaceItem({ place, onSelect, onDelete }) {
             ]
         );
     };
+    const handleEdit = () => {
+        navigation.navigate('EditScreen', {
+            place: place,
+        });
+    };
     const renderRightActions = () => {
         return (
-            <RectButton style={styles.rightActions} onPress={handleDelete}>
-                <Text style={styles.title}>Delete</Text>
-                <Ionicons name="trash-outline" size={20} color={Colors.gray700}/>
-            </RectButton>
+            <>
+                <RectButton style={[styles.rightActions, { backgroundColor: 'grey' }]} onPress={handleEdit}>
+                    <Text style={styles.title}>Edit</Text>
+                    <Ionicons name="create-outline" size={20} color={Colors.gray700}/>
+                </RectButton>
+                <RectButton style={styles.rightActions} onPress={handleDelete}>
+                    <Text style={styles.title}>Delete</Text>
+                    <Ionicons name="trash-outline" size={20} color={Colors.gray700}/>
+                </RectButton>
+            </>
         );
     };
 

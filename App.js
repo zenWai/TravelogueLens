@@ -15,6 +15,7 @@ import {SafeAreaView, View} from "react-native";
 import React, {useContext, useState} from "react";
 import GalleryScreen from "./screens/GalleryScreen";
 import {SafeAreaProvider} from "react-native-safe-area-context";
+import EditScreen from "./screens/EditScreen";
 
 const Stack = createNativeStackNavigator();
 const BottomTabs = createBottomTabNavigator();
@@ -112,6 +113,7 @@ export default function App() {
                             }}
                         />
                         <Stack.Screen name="GalleryScreen" component={GalleryScreen}/>
+                        <Stack.Screen name="EditScreen" component={EditScreen}/>
                     </Stack.Navigator>
                 </NavigationContainer>
             </SortContext.Provider>

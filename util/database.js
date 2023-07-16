@@ -162,12 +162,36 @@ export function insertFakePlaces(place) {
     });
 }
 
+/* for FakeInfo */
 export function getFakeImageURI(placeTitle) {
     // Return the local URI for the image
     return Image.resolveAssetSource(placeImages[placeTitle]).uri;
 }
 
-/* for FakeInfo */
+export function editPlace(id, title, date) {
+    // Convert the arrays into JSON strings
+
+    return new Promise((resolve, reject) => {
+        database.transaction((tx) => {
+            tx.executeSql(
+                `UPDATE places
+                 SET title = ?,
+                     date  = ?
+                 WHERE id = ?`,
+                [title, date, id],
+                (_, result) => {
+                    console.log("update place:");
+                    console.log(result);
+                    resolve(result);
+                },
+                (_, error) => {
+                    console.log(error);
+                    reject(error);
+                }
+            );
+        });
+    });
+}
 
 export function updatePOIS(placeId, nearbyPOIS, poiPhotoPaths) {
     // Convert the arrays into JSON strings
