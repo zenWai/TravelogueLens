@@ -11,7 +11,7 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs'
 import SettingsScreen from "./screens/SettingsScreen";
 import {Ionicons} from "@expo/vector-icons";
 import {showSortOptions, SortContext} from "./util/SortContext";
-import {SafeAreaView, View} from "react-native";
+import {View} from "react-native";
 import React, {useContext, useState} from "react";
 import GalleryScreen from "./screens/GalleryScreen";
 import {SafeAreaProvider} from "react-native-safe-area-context";

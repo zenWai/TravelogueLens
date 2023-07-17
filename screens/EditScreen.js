@@ -101,7 +101,6 @@ function EditScreen({ route, navigation }) {
                             {date.getTime() !== initialDateObject.getTime() && Platform.OS === 'android' &&
                                 <Text style={styles.label}> New Date: {date.toISOString().split('T')[0]}</Text>
                             }
-                            <OutlinedButton children={'Change Date'} onPress={showDatePicker} icon={'add'}/>
                             {show && Platform.OS === 'ios' && (
                                 <DateTimePicker
                                     testID="dateTimePicker"
@@ -114,6 +113,7 @@ function EditScreen({ route, navigation }) {
                                     maximumDate={new Date(2023, 11, 31)}
                                 />
                             )}
+                            <OutlinedButton children={'Change Date'} onPress={showDatePicker} icon={'add'}/>
                             {(title !== place.title || date.getTime() !== initialDateObject.getTime()) && (
                                 <>
                                     <OutlinedButton children='Save' icon="save-outline" onPress={saveEditedPlace}/>

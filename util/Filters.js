@@ -8,7 +8,7 @@ const Filters = ({ onChange, selections, filters }) => {
     const handlePress = (index, filter) => {
         onChange(index, filter);
         // Using the reference to scroll to the beginning of the ScrollView
-        scrollViewRef.current?.scrollTo({ x: 0, animated: true });
+        scrollViewRef.current?.scrollTo({ x: 0, animated: false });
     };
 
     return (
