@@ -67,7 +67,15 @@ function PlaceDetails({ route, navigation }) {
     }, [selectedPlacedId]);
 
 
-    if (!fetchedPlace) {
+    if (!fetchedPlace && isLoading) {
+        return (
+            <View style={styles.fallback}>
+                <ActivityIndicator size="large" color="#0000ff"/>
+            </View>
+        );
+    }
+
+    if (!fetchedPlace && !isLoading) {
         return (
             <View style={styles.fallback}>
                 <Text>No Place Data Available...</Text>
