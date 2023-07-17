@@ -46,7 +46,7 @@ export async function getAddress(lat, lng) {
     }
 }
 
-export function getNearbyPointsOfInterest(lat, lng, maxResults) {
+/*export function getNearbyPointsOfInterest(lat, lng, maxResults) {
     const radius = 20000; // Search radius in meters
 
     const url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${lat},${lng}&radius=${radius}&types=point_of_interest|tourist_attraction&key=${GOOGLE_API_KEY}`;
@@ -64,6 +64,51 @@ export function getNearbyPointsOfInterest(lat, lng, maxResults) {
                 'town_square',
                 'tourist_attraction',
                 'point_of_interest',
+            ];
+            // Filter and process the nearby places
+            const nearbyPOIs =
+                data.results
+                    .filter(place =>
+                        /!*place.types.includes('tourist_attraction')*!/
+                        place.types.some(type => desirableTypes.includes(type))
+                    )
+                    .slice(0, maxResults) // Limit the number of results
+                    .map(place => {
+                        return {
+                            name: place.name,
+                            photo_reference: place.photos ? place.photos[0].photo_reference : null,
+                            place_id: place.place_id,
+                            rating: place.rating,
+                            user_ratings_total: place.user_ratings_total,
+                            types: place.types.map(type => type.replace(/_/g, ' ')),
+                        };
+                    });
+            console.log(nearbyPOIs);
+            return nearbyPOIs;
+        })
+        .catch(error => {
+            console.log('Error fetching nearby points of interest:', error);
+            throw error;
+        });
+}*/
+
+export function getNearbyPointsOfInterest(lat, lng, maxResults) {
+    const radius = 20000; // Search radius in meters
+
+    const url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${lat},${lng}&radius=${radius}&key=${GOOGLE_API_KEY}`;
+
+    return fetch(url)
+        .then(response => response.json())
+        .then(data => {
+            const desirableTypes = [
+                'aquarium',
+                'art_gallery',
+                'casino',
+                'museum',
+                'landmark',
+                'natural_feature',
+                'town_square',
+                'tourist_attraction',
             ];
             // Filter and process the nearby places
             const nearbyPOIs =
