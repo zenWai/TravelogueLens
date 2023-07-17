@@ -46,60 +46,17 @@ export async function getAddress(lat, lng) {
     }
 }
 
-/*export function getNearbyPointsOfInterest(lat, lng, maxResults) {
-    const radius = 20000; // Search radius in meters
-
-    const url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${lat},${lng}&radius=${radius}&types=point_of_interest|tourist_attraction&key=${GOOGLE_API_KEY}`;
-
-    return fetch(url)
-        .then(response => response.json())
-        .then(data => {
-            const desirableTypes = [
-                'aquarium',
-                'art_gallery',
-                'casino',
-                'museum',
-                'landmark',
-                'natural_feature',
-                'town_square',
-                'tourist_attraction',
-                'point_of_interest',
-            ];
-            // Filter and process the nearby places
-            const nearbyPOIs =
-                data.results
-                    .filter(place =>
-                        /!*place.types.includes('tourist_attraction')*!/
-                        place.types.some(type => desirableTypes.includes(type))
-                    )
-                    .slice(0, maxResults) // Limit the number of results
-                    .map(place => {
-                        return {
-                            name: place.name,
-                            photo_reference: place.photos ? place.photos[0].photo_reference : null,
-                            place_id: place.place_id,
-                            rating: place.rating,
-                            user_ratings_total: place.user_ratings_total,
-                            types: place.types.map(type => type.replace(/_/g, ' ')),
-                        };
-                    });
-            console.log(nearbyPOIs);
-            return nearbyPOIs;
-        })
-        .catch(error => {
-            console.log('Error fetching nearby points of interest:', error);
-            throw error;
-        });
-}*/
-
 export function getNearbyPointsOfInterest(lat, lng, maxResults) {
-    const radius = 20000; // Search radius in meters
+    const radius = 50000; // Search radius in meters
 
     const url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${lat},${lng}&radius=${radius}&key=${GOOGLE_API_KEY}`;
 
     return fetch(url)
         .then(response => response.json())
         .then(data => {
+            console.log('data results',data.results);
+            console.log('data', data);
+            console.log('data types:',data.types)
             const desirableTypes = [
                 'aquarium',
                 'art_gallery',
@@ -110,24 +67,28 @@ export function getNearbyPointsOfInterest(lat, lng, maxResults) {
                 'town_square',
                 'tourist_attraction',
             ];
-            // Filter and process the nearby places
-            const nearbyPOIs =
-                data.results
-                    .filter(place =>
-                        /*place.types.includes('tourist_attraction')*/
-                        place.types.some(type => desirableTypes.includes(type))
-                    )
-                    .slice(0, maxResults) // Limit the number of results
-                    .map(place => {
-                        return {
-                            name: place.name,
-                            photo_reference: place.photos ? place.photos[0].photo_reference : null,
-                            place_id: place.place_id,
-                            rating: place.rating,
-                            user_ratings_total: place.user_ratings_total,
-                            types: place.types.map(type => type.replace(/_/g, ' ')),
-                        };
-                    });
+            //  the desirable places get prioritized and are moved to the front of the array.
+            //  If there are not enough desirable places, point_of_interest places fill up the remaining spots up to maxResults
+            const sortedPlaces = data.results.sort((a, b) => {
+                const aIsDesirable = a.types.some(type => desirableTypes.includes(type));
+                const bIsDesirable = b.types.some(type => desirableTypes.includes(type));
+                // If a is desirable and b isn't, it returns -1, meaning a comes first
+                if (aIsDesirable && !bIsDesirable) return -1;
+                // If b is desirable and a isn't, it returns 1, meaning b comes first
+                if (!aIsDesirable && bIsDesirable) return 1;
+                // If both are desirable or neither are desirable, it then checks if a or b is a point_of_interest
+                // If a is a point_of_interest and b isn't, it returns -1, meaning a comes first
+                if (a.types.includes('point_of_interest') && !b.types.includes('point_of_interest')) return -1;
+                // If b is a point_of_interest and a isn't, it returns 1, meaning b comes first
+                if (!a.types.includes('point_of_interest') && b.types.includes('point_of_interest')) return 1;
+                // If both or neither are point_of_interest, it returns 0, meaning their current order is preserved
+                return 0;
+            });
+
+            const nearbyPOIs = sortedPlaces
+                .slice(0, maxResults)
+                .map(formatPlace);
+
             console.log(nearbyPOIs);
             return nearbyPOIs;
         })
@@ -135,6 +96,16 @@ export function getNearbyPointsOfInterest(lat, lng, maxResults) {
             console.log('Error fetching nearby points of interest:', error);
             throw error;
         });
+}
+function formatPlace(place) {
+    return {
+        name: place.name,
+        photo_reference: place.photos ? place.photos[0].photo_reference : null,
+        place_id: place.place_id,
+        rating: place.rating,
+        user_ratings_total: place.user_ratings_total,
+        types: place.types.map(type => type.replace(/_/g, ' ')),
+    };
 }
 
 export async function fetchPointOfInterestReviews(placeId) {
