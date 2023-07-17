@@ -67,10 +67,6 @@ export function insertPlace(place) {
     } else {
         formattedDate = place.date;
     }
-    console.log('place id:', place.id);
-    console.log(place.city)
-    console.log(place.country);
-    console.log('in db fact', place.interestingFact);
     const countryFlagEmoji = countryCodeToEmoji(place.countryCode);
     // expo-sqlite does not support array storing
     // converting the arrays into JSON strings
@@ -97,8 +93,6 @@ export function insertPlace(place) {
                     place.interestingFact,
                 ],
                 (_, result) => {
-                    console.log("insert place:");
-                    console.log(result);
                     resolve(result);
                 },
                 (_, error) => {
@@ -127,7 +121,6 @@ export function insertFakePlaces(place) {
     const nearbyPOISString = JSON.stringify(place.nearbyPOIS);
     const poiPhotoPathsString = JSON.stringify(place.poiPhotoPaths);
 
-
     return new Promise((resolve, reject) => {
         database.transaction((tx) => {
             tx.executeSql(
@@ -149,8 +142,6 @@ export function insertFakePlaces(place) {
                     place.interestingFact,
                 ],
                 (_, result) => {
-                    console.log("insert place:");
-                    console.log(result);
                     resolve(result);
                 },
                 (_, error) => {
@@ -180,8 +171,6 @@ export function editPlace(id, title, date) {
                  WHERE id = ?`,
                 [title, date, id],
                 (_, result) => {
-                    console.log("update place:");
-                    console.log(result);
                     resolve(result);
                 },
                 (_, error) => {
@@ -207,8 +196,6 @@ export function updatePOIS(placeId, nearbyPOIS, poiPhotoPaths) {
                  WHERE id = ?`,
                 [nearbyPOISString, poiPhotoPathsString, placeId],
                 (_, result) => {
-                    console.log("update POIS:");
-                    console.log(result);
                     resolve(result);
                 },
                 (_, error) => {
@@ -245,8 +232,6 @@ export function fetchPlaces(filter = {}, sort) {
     } else if (sort === "date_desc") {
         query += ' ORDER BY date DESC';
     }
-    console.log("Query:", query);
-    console.log("Params:", params);
 
     return new Promise((resolve, reject) => {
         database.transaction((tx) => {
@@ -310,7 +295,6 @@ export function fetchPlaceDetails(id) {
                     );
                     place.nearbyPOIS = JSON.parse(dbPlace.nearbyPOIS);
                     place.poiPhotoPaths = JSON.parse(dbPlace.poiPhotoPaths);
-                    console.log(place.poiPhotoPaths)
                     resolve(place);
                 },
                 (_, error) => {
@@ -331,6 +315,7 @@ export function deletePlace(id) {
                     resolve(result);
                 },
                 (_, error) => {
+                    console.log(error);
                     reject(error);
                 }
             );
@@ -356,7 +341,6 @@ export async function downloadAndSavePOIPhoto(photo_reference) {
         const downloadRes = await FileSystem.downloadAsync(photoUrl, path);
 
         if (downloadRes.status === 200) {
-            console.log('Image downloaded and saved at path:', path);
             return path;
         } else {
             console.log('Failed to download image');

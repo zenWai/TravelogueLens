@@ -27,7 +27,6 @@ function LocationPicker({ location, onLocationPick }) {
     useEffect(() => {
         if (location && (location.lat !== pickedLocation?.lat || location.lng !== pickedLocation?.lng)) {
             setLoadingLocation(true);
-            console.log('location use effect',location)
             setPickedLocation(location);
             setLoadingLocation(false);
         } else if (!location || location.lat === 0) {

@@ -20,9 +20,8 @@ function GalleryScreen({ navigation, route }) {
         });
     }, []);
     const width = Dimensions.get('window').width;
-    console.log(places)
-    return (
 
+    return (
         <GestureHandlerRootView>
             <Carousel
                 keyExtractor={(item) => item.id}
@@ -32,7 +31,6 @@ function GalleryScreen({ navigation, route }) {
                 data={places}
                 scrollAnimationDuration={1000}
                 onSnapToItem={(index) => {
-                    console.log('current index:', index);
                     setActiveIndex(index);
                     navigation.setOptions({
                         headerTitle: () => (

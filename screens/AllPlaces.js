@@ -28,7 +28,6 @@ function AllPlaces({ route, navigation }) {
                 places = await fetchPlaces({}, sort);
             }
             setLoadedPlaces(places)
-            console.log('logPlaces', places[0])
             const uniqueCities = [...new Set(places.map(place => place.city))];
             const uniqueCountries = [...new Set(places.map(place => place.country))];
             const countryObjects = uniqueCountries.map(country => {

@@ -21,7 +21,6 @@ export function InterestingFacts(city, country) {
     })
         .then(response => response.json())
         .then(data => {
-            console.log('Received data:', data.choices[0].message);
             if (data.choices && data.choices[0] && data.choices[0].message) {
                 return data.choices[0].message.content;
             } else {

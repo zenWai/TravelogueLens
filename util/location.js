@@ -7,9 +7,7 @@ export function getMapPreview(lat, lng) {
 
 export function getPOIPhoto(photo_reference) {
     const photoReference = photo_reference.replace(/(\r\n|\n|\r)/gm, '');
-    const s = `https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=${photoReference}&key=${GOOGLE_API_KEY}`;
-    console.log(s);
-    return s;
+    return `https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=${photoReference}&key=${GOOGLE_API_KEY}`;
 }
 
 export async function getAddress(lat, lng) {
@@ -54,9 +52,6 @@ export function getNearbyPointsOfInterest(lat, lng, maxResults) {
     return fetch(url)
         .then(response => response.json())
         .then(data => {
-            console.log('data results',data.results);
-            console.log('data', data);
-            console.log('data types:',data.types)
             const desirableTypes = [
                 'aquarium',
                 'art_gallery',
@@ -85,18 +80,16 @@ export function getNearbyPointsOfInterest(lat, lng, maxResults) {
                 return 0;
             });
 
-            const nearbyPOIs = sortedPlaces
+            return sortedPlaces
                 .slice(0, maxResults)
                 .map(formatPlace);
-
-            console.log(nearbyPOIs);
-            return nearbyPOIs;
         })
         .catch(error => {
             console.log('Error fetching nearby points of interest:', error);
             throw error;
         });
 }
+
 function formatPlace(place) {
     return {
         name: place.name,
@@ -111,6 +104,5 @@ function formatPlace(place) {
 export async function fetchPointOfInterestReviews(placeId) {
     const response = await fetch(`https://maps.googleapis.com/maps/api/place/details/json?placeid=${placeId}&key=${GOOGLE_API_KEY}`);
     const data = await response.json();
-    console.log(JSON.stringify(data.result, null, 2));
     return data.result.reviews;
 }

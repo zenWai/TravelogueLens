@@ -71,9 +71,6 @@ function ImagePicker({ onImageTaken }) {
         }
 
 
-
-
-
         return true;
     }
 
@@ -108,11 +105,6 @@ function ImagePicker({ onImageTaken }) {
         } finally {
             setLoadingPicture(false);
         }
-        console.log(image.assets)
-        console.log(image.assets[0])
-        console.log(image.assets[0].uri)
-        console.log(image.assets[0].fileName)
-
     }
 
     async function selectImageHandler() {
@@ -132,9 +124,6 @@ function ImagePicker({ onImageTaken }) {
         try {
             if (!image.canceled) {
                 // This will get additional info about the asset, including the EXIF data
-                console.log('log image', image.assets[0].uri);
-
-                console.log(image.assets[0].exif)
                 let lat = 0;
                 let lng = 0;
 
@@ -152,45 +141,38 @@ function ImagePicker({ onImageTaken }) {
                     } else {
                         lng = image.assets[0].exif.GPSLongitude;
                     }
-
                     if (image.assets[0].exif.GPSLatitudeRef === 'S') lat = -lat;
                     if (image.assets[0].exif.GPSLongitudeRef === 'W') lng = -lng;
                 }
                 //date
                 let formattedDate = '';
                 if ("DateTimeOriginal" in image.assets[0].exif) {
-                    const dateTimeOriginal = image.assets[0].exif.DateTimeOriginal; // "2023:04:03 19:42:39"
-                    const date = dateTimeOriginal.split(' ')[0]; // "2023:04:03"
-                    formattedDate = date.replace(/:/g, '-'); // "2023-04-03"
+                    const dateTimeOriginal = image.assets[0].exif.DateTimeOriginal;
+                    const date = dateTimeOriginal.split(' ')[0];
+                    formattedDate = date.replace(/:/g, '-');
                 } else if ("DateTimeDigitized" in image.assets[0].exif) {
-                    const DateTimeDigitized = image.assets[0].exif.DateTimeDigitized; // "2023:04:03 19:42:39"
-                    const date = DateTimeDigitized.split(' ')[0]; // "2023:04:03"
-                    formattedDate = date.replace(/:/g, '-'); // "2023-04-03"
+                    const DateTimeDigitized = image.assets[0].exif.DateTimeDigitized;
+                    const date = DateTimeDigitized.split(' ')[0];
+                    formattedDate = date.replace(/:/g, '-');
                 } else if ("DateTime" in image.assets[0].exif) {
-                    console.log('in DateTime exif/app crash?');
-                    const DateTime = image.assets[0].exif.DateTime; // "2023:04:03 19:42:39"
-                    const date = DateTime.split(' ')[0]; // "2023:04:03"
-                    formattedDate = date.replace(/:/g, '-'); // "2023-04-03"
+                    const DateTime = image.assets[0].exif.DateTime;
+                    const date = DateTime.split(' ')[0];
+                    formattedDate = date.replace(/:/g, '-');
                 }
-                console.log('lat', lat);
-                console.log('lng', lng);
                 setPickedImage(image.assets);
                 let location = undefined;
 
                 if (lat !== 0 && lng !== 0) {
                     location = { lat, lng };
                 }
-                console.log(location)
                 onImageTaken(image.assets, location, formattedDate !== '' ? formattedDate : undefined);
                 //date
-
             }
         } catch (error) {
             console.log('error picking image', error);
         } finally {
             setLoadingPicture(false);
         }
-
     }
 
     let imagePreview = <Text>No image taken yet.</Text>;

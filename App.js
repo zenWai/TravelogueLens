@@ -22,8 +22,6 @@ const BottomTabs = createBottomTabNavigator();
 
 
 function HomeTabs() {
-    console.log(React); // Should log the React object, which should include useContext
-    console.log(useContext); // Should log the useContext function
     const { setSort } = useContext(SortContext);
     return (
         <BottomTabs.Navigator screenOptions={{

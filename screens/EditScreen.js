@@ -29,7 +29,6 @@ function EditScreen({ route, navigation }) {
         navigation.setOptions({
             title: `Edit: ${place.countryFlagEmoji} ${place.city} - ${place.title}`
         })
-        console.log(date);
     }, [place, navigation]);
 
     const onChange = (event, selectedDate) => {
@@ -37,7 +36,6 @@ function EditScreen({ route, navigation }) {
         if (selectedDate) {
             setDate(selectedDate);
         }
-        console.log(date);
     };
 
     const showDatePicker = () => {
@@ -63,7 +61,7 @@ function EditScreen({ route, navigation }) {
         try {
             await editPlace(place.id, title, formattedDate);
         } catch (error) {
-
+            console.log('Error in saving editedPlace', error);
         } finally {
             Alert.alert('Done', `${place.title} is now ${title} with date ${formattedDate}`)
             navigation.navigate('AllPlaces')

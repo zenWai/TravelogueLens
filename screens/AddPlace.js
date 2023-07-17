@@ -17,7 +17,6 @@ function AddPlace({ navigation }) {
             const address = infoFromLocation.address;
             const country = infoFromLocation.country;
             const countryCode = infoFromLocation.countryCode;
-            console.log('countryCode', countryCode);
             const city = infoFromLocation.city;
             if (!city || !country) {
                 Alert.alert(
@@ -27,11 +26,8 @@ function AddPlace({ navigation }) {
                 return;
             }
             const maxResults = await getMaxPOIResultsSetting();
-            console.log('maxResults', maxResults)
             const nearbyPOIS = await getNearbyPointsOfInterest(place.location.lat, place.location.lng, maxResults);
-            console.log(nearbyPOIS)
             const interestingFact = await InterestingFacts(city, country);
-            console.log('fact: ',interestingFact);
             const poiPhotoPaths = [];
             for (let poi of nearbyPOIS) {
                 if (poi.photo_reference) {
@@ -44,9 +40,7 @@ function AddPlace({ navigation }) {
                 from: place.imageUri,
                 to: newImageUri,
             });
-            console.log('New image URI:', newImageUri);
             place.imageUri = newImageUri;
-            console.log(place.date)
 
             const newPlace = {
                 ...place,

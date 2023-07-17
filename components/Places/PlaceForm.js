@@ -40,7 +40,6 @@ function PlaceForm({ onCreatePlace }) {
             undefined,
             gotFormatedDate,
         );
-        console.log('Place Data: ', placeData);
         onCreatePlace(placeData);
     }
 
@@ -48,7 +47,6 @@ function PlaceForm({ onCreatePlace }) {
         setImageTaken(imageUri);
         onLocationPickHandler(location);
         setLocationPicked(location);
-        console.log('form data', formattedDate)
         if (formattedDate) {
             setGotFormatedDate(formattedDate)
         }

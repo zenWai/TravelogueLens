@@ -24,7 +24,6 @@ function PlaceDetails({ route, navigation }) {
             const result = await getMaxPOIResultsSetting();
             setMaxResults(result);
             const place = await fetchPlaceDetails(selectedPlacedId);
-            console.log('ddddd', place.interestingFact)
             setFetchedPlace(place);
             navigation.setOptions({
                 title: place.title,
@@ -94,7 +93,6 @@ function PlaceDetails({ route, navigation }) {
         const reviews = await fetchPointOfInterestReviews(placeId);
         setCurrentReviews(reviews);
         setIsReviewVisible(true);
-        console.log(reviews)
     }
 
     const closeModal = () => {
@@ -102,14 +100,9 @@ function PlaceDetails({ route, navigation }) {
     };
 
     const screenWidth = Dimensions.get('window').width;
-    const screenHeight = Dimensions.get('window').height;
-    console.log('studdddddd', { fetchedPlace })
+
     return (
         <ScrollView>
-
-
-            {/*<Image style={styles.image} source={{ uri: fetchedPlace.imageUri }} resizeMode="stretch"/>*/}
-
             <ImageModal
                 swipeToDismiss={true}
                 resizeMode="stretch"
