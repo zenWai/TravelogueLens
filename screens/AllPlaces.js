@@ -20,7 +20,13 @@ function AllPlaces({ route, navigation }) {
         try {
             setLoading(true);
             await init();
-            const places = await fetchPlaces(filter, sort);
+            let places = await fetchPlaces(filter, sort);
+            // If no places are found with the current filters, try again with no filters.
+            // Reset filter state && fetch places with no filter
+            if (places.length === 0) {
+                setFilter({ city: [], country: [] });
+                places = await fetchPlaces({}, sort);
+            }
             setLoadedPlaces(places)
             console.log('logPlaces', places[0])
             const uniqueCities = [...new Set(places.map(place => place.city))];
