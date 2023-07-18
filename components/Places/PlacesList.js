@@ -15,7 +15,7 @@ function PlacesList({ places, onDelete }) {
     if (!places || places.length === 0) {
         return (
             <View style={styles.fallbackContainer}>
-                <Text style={styles.fallbackText}>No places added yet - start adding places</Text>
+                <Text style={styles.fallbackText}>Your list of places is currently empty. Start exploring and add your first place!</Text>
             </View>
         );
     }

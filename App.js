@@ -16,6 +16,7 @@ import React, {useContext, useState} from "react";
 import GalleryScreen from "./screens/GalleryScreen";
 import {SafeAreaProvider} from "react-native-safe-area-context";
 import EditScreen from "./screens/EditScreen";
+import FlashMessage from "react-native-flash-message";
 
 const Stack = createNativeStackNavigator();
 const BottomTabs = createBottomTabNavigator();
@@ -115,6 +116,7 @@ export default function App() {
                     </Stack.Navigator>
                 </NavigationContainer>
             </SortContext.Provider>
+            <FlashMessage position='top'/>
         </SafeAreaProvider>
     );
 }

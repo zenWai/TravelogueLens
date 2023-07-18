@@ -10,6 +10,7 @@ import {
 import {useCallback, useState} from "react";
 import {Colors} from "../../constants/colors";
 import OutlinedButton from "../UI/OutlinedButton";
+import {showMessage} from "react-native-flash-message";
 
 function ImagePicker({ onImageTaken }) {
     const [cameraPermissionInformation, requestPermission] = useCameraPermissions();
@@ -101,7 +102,15 @@ function ImagePicker({ onImageTaken }) {
                 onImageTaken(image.assets);
             }
         } catch (error) {
-            console.log('error taking picture', error);
+            showMessage({
+                message: `${error}`,
+                description: `Please try again!`,
+                type: "warning",
+                icon: 'auto',
+                floating: true,
+                position: "top",
+                autoHide: false,
+            });
         } finally {
             setLoadingPicture(false);
         }
@@ -164,12 +173,39 @@ function ImagePicker({ onImageTaken }) {
 
                 if (lat !== 0 && lng !== 0) {
                     location = { lat, lng };
+                    showMessage({
+                        message: `Location Found`,
+                        description: `We successfully retrieved the location of your photo. Check your map for the location.`,
+                        type: "success",
+                        icon: 'auto',
+                        floating: true,
+                        position: "top",
+                        autoHide: true,
+                    });
+                } else {
+                    showMessage({
+                        message: `Manual Location Required`,
+                        description: `We couldn't automatically retrieve the location of your photo. Please select the location on your map.`,
+                        type: "default",
+                        icon: 'auto',
+                        floating: true,
+                        position: "top",
+                        autoHide: false,
+                    });
                 }
                 onImageTaken(image.assets, location, formattedDate !== '' ? formattedDate : undefined);
                 //date
             }
         } catch (error) {
-            console.log('error picking image', error);
+            showMessage({
+                message: `${error}`,
+                description: `Please try again!`,
+                type: "warning",
+                icon: 'auto',
+                floating: true,
+                position: "top",
+                autoHide: true,
+            });
         } finally {
             setLoadingPicture(false);
         }

@@ -1,10 +1,11 @@
-import {Alert, ScrollView, StyleSheet, Text, TextInput, View} from "react-native";
+import {ScrollView, StyleSheet, Text, TextInput, View} from "react-native";
 import {useCallback, useState} from "react";
 import {Colors} from "../../constants/colors";
 import ImagePicker from "./ImagePicker";
 import LocationPicker from "./LocationPicker";
 import Button from "../UI/Button";
 import {Place} from "../../models/place";
+import {showMessage} from "react-native-flash-message";
 
 function PlaceForm({ onCreatePlace }) {
     const [enteredTitle, setEnteredTitle] = useState('');
@@ -29,8 +30,16 @@ function PlaceForm({ onCreatePlace }) {
         }
         if (missingFields.length > 0) {
             const missingFieldsText = missingFields.join(', ');
-            const alertMessage = `${missingFieldsText}`;
-            Alert.alert('To save this place we need this information:', alertMessage);
+            const alertMessage = `We're missing some information: ${missingFieldsText}.`;
+            showMessage({
+                message: `We can't save your place yet`,
+                description: `${alertMessage} Please provide these details before saving.`,
+                type: "warning",
+                icon: 'auto',
+                floating: true,
+                position: "top",
+                autoHide: true,
+            });
             return;
         }
         const placeData = new Place(

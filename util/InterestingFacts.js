@@ -24,10 +24,8 @@ export function InterestingFacts(city, country) {
             if (data.choices && data.choices[0] && data.choices[0].message) {
                 return data.choices[0].message.content;
             } else {
-                throw new Error('Unexpected API response');
+                console.error('Unexpected API response');
+                return '';
             }
         })
-        .catch((error) => {
-            console.error('Error:', error);
-        });
 }

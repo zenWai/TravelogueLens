@@ -13,8 +13,8 @@ function GalleryScreen({ navigation, route }) {
         navigation.setOptions({
             headerTitle: () => (
                 <View style={{ flex: 1, paddingHorizontal: 10 }}>
-                    <Text
-                        style={{ fontSize: 18 }}>{`${places[0].countryFlagEmoji} ${places[0].city} - ${places[0].title}`}</Text>
+                    <Text style={{ fontSize: 18 }}>{places[0].title}</Text>
+                    <Text style={{ fontSize: 16 }}>{`${places[0].countryFlagEmoji} ${places[0].city}`}</Text>
                 </View>
             ),
         });
@@ -35,8 +35,8 @@ function GalleryScreen({ navigation, route }) {
                     navigation.setOptions({
                         headerTitle: () => (
                             <View style={{ flex: 1, marginHorizontal: 10 }}>
-                                <Text
-                                    style={{ fontSize: 18 }}>{`${places[index].countryFlagEmoji} ${places[index].city} - ${places[index].title}`}</Text>
+                                <Text style={{ fontSize: 18 }}>{places[index].title}</Text>
+                                <Text style={{ fontSize: 16 }}>{`${places[index].countryFlagEmoji} ${places[index].city}`}</Text>
                             </View>
                         ),
                     });

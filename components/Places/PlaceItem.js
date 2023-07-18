@@ -9,15 +9,15 @@ function PlaceItem({ place, onSelect, onDelete }) {
     const navigation = useNavigation();
     const handleDelete = () => {
         Alert.alert(
-            "Confirmation",
-            `Are you sure you want to delete you ${place.title} place?`, // Alert message
+            "Are you sure?",
+            `Are you sure you want to delete the place named "${place.title}"? This action cannot be undone.`, // Alert message
             [
                 {
-                    text: "Cancel",
+                    text: "No, keep it",
                     style: "cancel"
                 },
                 {
-                    text: "Yes-I am sure!",
+                    text: "Yes, delete it",
                     onPress: () => onDelete(place.id)
                 }
             ]

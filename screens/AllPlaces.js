@@ -7,6 +7,7 @@ import {Colors} from "../constants/colors";
 import Filters from "../util/Filters";
 import {SortContext} from "../util/SortContext";
 import OutlinedButton from "../components/UI/OutlinedButton";
+import {showMessage} from "react-native-flash-message";
 
 function AllPlaces({ route, navigation }) {
     const { sort, setSort } = useContext(SortContext);
@@ -23,22 +24,33 @@ function AllPlaces({ route, navigation }) {
             let places = await fetchPlaces(filter, sort);
             // If no places are found with the current filters, try again with no filters.
             // Reset filter state && fetch places with no filter
-            if (places.length === 0) {
+            if (places.length === 0 && (filter.city.length !== 0 || filter.country.length !== 0)) {
                 setFilter({ city: [], country: [] });
                 places = await fetchPlaces({}, sort);
             }
             setLoadedPlaces(places)
-            const uniqueCities = [...new Set(places.map(place => place.city))];
-            const uniqueCountries = [...new Set(places.map(place => place.country))];
-            const countryObjects = uniqueCountries.map(country => {
-                const flag = places.find(place => place.country === country).countryFlagEmoji;
-                return { country, flag };
-            });
-            setCountries(countryObjects);
-            setCities(uniqueCities);
+            if (places.length !== 0) {
+                const uniqueCities = [...new Set(places.map(place => place.city))];
+                const uniqueCountries = [...new Set(places.map(place => place.country))];
+                const countryObjects = uniqueCountries.map(country => {
+                    const flag = places.find(place => place.country === country).countryFlagEmoji;
+                    return { country, flag };
+                });
+                setCountries(countryObjects);
+                setCities(uniqueCities);
+            }
 
         } catch (error) {
             console.log('Error loading places:', error);
+            showMessage({
+                message: `Oops!`,
+                description: `We encountered an error while loading your places. Please try again.`,
+                type: "warning",
+                icon: 'auto',
+                floating: true,
+                position: "top",
+                autoHide: true,
+            });
         } finally {
             setLoading(false);
         }
@@ -54,12 +66,29 @@ function AllPlaces({ route, navigation }) {
         // Database
         deletePlace(id)
             .then(() => {
-                console.log('Place deleted successfully');
+                showMessage({
+                    message: `Success`,
+                    description: `The place has been successfully removed.`,
+                    type: "default",
+                    icon: 'auto',
+                    floating: true,
+                    position: "top",
+                    autoHide: true,
+                });
                 // reload the data after deletion
                 loadPlaces();
             })
             .catch((error) => {
-                console.log('Error deleting place:', error);
+                console.log(error);
+                showMessage({
+                    message: `Oops!`,
+                    description: `We encountered an error while trying to delete the place. Please try again.`,
+                    type: "warning",
+                    icon: 'auto',
+                    floating: true,
+                    position: "top",
+                    autoHide: true,
+                });
             });
     }
 

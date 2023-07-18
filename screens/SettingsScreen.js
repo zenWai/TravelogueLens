@@ -1,13 +1,4 @@
-import {
-    ActivityIndicator,
-    Alert,
-    Keyboard,
-    KeyboardAvoidingView,
-    StyleSheet,
-    Text,
-    TextInput,
-    View
-} from "react-native";
+import {ActivityIndicator, Keyboard, KeyboardAvoidingView, StyleSheet, Text, TextInput, View} from "react-native";
 import {useEffect, useState} from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {getMaxPOIResultsSetting} from "../util/database";
@@ -15,6 +6,7 @@ import {Colors} from "../constants/colors";
 import fakePlaces from "../util/createFakeInfoPlaces";
 import {createFakeInfo} from "../util/createFakeInfo";
 import OutlinedButton from "../components/UI/OutlinedButton";
+import {showMessage} from "react-native-flash-message";
 
 function SettingsScreen() {
     const [maxResults, setMaxResults] = useState(5);
@@ -27,15 +19,19 @@ function SettingsScreen() {
 
     const saveMaxResultsSetting = async () => {
         if (maxResults === "") {
-            alert('Please enter a number.');
+            alert('Please enter a valid number to set the maximum results.');
             return;
         }
         Keyboard.dismiss();
         await AsyncStorage.setItem('maxResults', maxResults.toString());
-        Alert.alert(
-            `Setting saved.`,
-            `Will now show ${maxResults} Points of Interests on your Places`
-        );
+        showMessage({
+            message: "Settings updated successfully!",
+            description: `Your places will now display up to ${maxResults} Points of Interest.`,
+            type: "success",
+            icon: 'auto',
+            floating: true,
+            position: "center",
+        });
     }
 
     const handleMaxResultsChange = (value) => {
@@ -55,17 +51,38 @@ function SettingsScreen() {
     };
 
     const insertFakePlaces = async () => {
-        setLoading(true);
-        for (let i = 0; i < fakePlaces.length; i++) {
-            await createFakeInfo(fakePlaces[i]);
-            setCurrentProgress(i + 1);
+        try {
+            setLoading(true);
+            for (let i = 0; i < fakePlaces.length; i++) {
+                await createFakeInfo(fakePlaces[i]);
+                setCurrentProgress(i + 1);
+            }
+        } catch (error) {
+            showMessage({
+                message: `An error occurred while creating the fake places: ${error}`,
+                description: `Please try again.`,
+                type: "warning",
+                icon: 'auto',
+                floating: true,
+                position: "top",
+            });
+        } finally {
+            setLoading(false);
+            showMessage({
+                message: `Success!`,
+                description: `You've successfully created 20 fake places for demonstration purposes.`,
+                type: "success",
+                icon: 'auto',
+                floating: true,
+                position: "top",
+                autoHide: false,
+            });
         }
-        setLoading(false);
     };
 
     return (
         <KeyboardAvoidingView style={styles.container} behavior="padding">
-            <Text style={styles.label}>Max nearby Points of Interest to show:</Text>
+            <Text style={styles.label}>Set the limit for displayed nearby Points of Interest (maximum is 10):</Text>
             <TextInput
                 style={styles.input}
                 value={maxResults.toString()}

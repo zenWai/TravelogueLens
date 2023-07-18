@@ -65,8 +65,8 @@ function Map({ navigation, route }) {
 
         if (!city || !country) {
             Alert.alert(
-                'Location not found or too rural',
-                'You can pick a nearby location on your map'
+                'Location Unavailable',
+                'The selected location was not found or it may be too remote. Please choose a location closer to a city or town.'
             );
             return false;
         }
@@ -79,8 +79,8 @@ function Map({ navigation, route }) {
     const savePickedLocationHandler = useCallback(async () => {
         if (!selectedLocation) {
             Alert.alert(
-                'No location picked!',
-                'Tap on the map to pick a location'
+                'No Location Selected',
+                'Please tap on the map to choose your desired location.'
             );
             return;
         }
@@ -131,8 +131,8 @@ function Map({ navigation, route }) {
 
                 if (!hasPermission) { // Change the condition here
                     Alert.alert(
-                        'Insufficient Permissions',
-                        'You need to grant location permissions to use this app',
+                        'Permission Required',
+                        'This app requires location permissions to function correctly. Please grant the necessary permissions.',
                         [
                             {
                                 text: 'Cancel',
@@ -159,7 +159,7 @@ function Map({ navigation, route }) {
                         lng: coords.longitude,
                     });
                 } catch (error) {
-                    console.log('Error fetching current location:', error);
+                    console.log('An error occurred while retrieving the current location:', error);
                 } finally {
                     setIsLoading(false);
                 }

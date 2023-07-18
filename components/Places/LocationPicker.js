@@ -5,6 +5,7 @@ import {getCurrentPositionAsync, PermissionStatus, useForegroundPermissions} fro
 import {getMapPreview} from "../../util/location";
 import {useCallback, useEffect, useState} from "react";
 import {useIsFocused, useNavigation, useRoute} from "@react-navigation/native";
+import {showMessage} from "react-native-flash-message";
 
 function LocationPicker({ location, onLocationPick }) {
     const [pickedLocation, setPickedLocation] = useState();
@@ -81,7 +82,6 @@ function LocationPicker({ location, onLocationPick }) {
         }
 
 
-
         return true;
     }
 
@@ -98,7 +98,15 @@ function LocationPicker({ location, onLocationPick }) {
                 lng: location.coords.longitude
             });
         } catch (error) {
-            console.log(error);
+            showMessage({
+                message: `${error}`,
+                description: `Please try again!`,
+                type: "warning",
+                icon: 'auto',
+                floating: true,
+                position: "top",
+                autoHide: true,
+            });
         } finally {
             setLoadingLocation(false)
         }
@@ -117,12 +125,9 @@ function LocationPicker({ location, onLocationPick }) {
     }
 
     let locationPreview;
-    if(!pickedLocation || pickedLocation === 0) {
+    if (!pickedLocation || pickedLocation === 0) {
         locationPreview = <Text>No location picked yet.</Text>
-    }else {
-        console.log(1);
-        console.log('pickedLocation', pickedLocation)
-        console.log('location in else',location)
+    } else {
         locationPreview = (
             <Image
                 style={styles.mapPreviewImage}

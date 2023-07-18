@@ -17,6 +17,7 @@ import {Colors} from "../constants/colors";
 import DateTimePicker, {DateTimePickerAndroid} from '@react-native-community/datetimepicker';
 import OutlinedButton from "../components/UI/OutlinedButton";
 import {editPlace} from "../util/database";
+import {showMessage} from "react-native-flash-message";
 
 function EditScreen({ route, navigation }) {
     const { place } = route.params;
@@ -53,7 +54,7 @@ function EditScreen({ route, navigation }) {
 
     const saveEditedPlace = async () => {
         if (!title || title.trim().length === 0) {
-            Alert.alert('To save this place we need a title', 'Is title empty?');
+            Alert.alert('Please enter a title', 'The place must have a title to be saved.');
             return;
         }
         const formattedDate = date.toISOString().split('T')[0];
@@ -62,8 +63,17 @@ function EditScreen({ route, navigation }) {
             await editPlace(place.id, title, formattedDate);
         } catch (error) {
             console.log('Error in saving editedPlace', error);
+            Alert.alert('Oops!', `There was an issue saving your changes. Please try again.`);
         } finally {
-            Alert.alert('Done', `${place.title} is now ${title} with date ${formattedDate}`)
+            showMessage({
+                message: `Changes saved!`,
+                description: `You've successfully updated the details for ${title}.`,
+                type: "success",
+                icon: 'auto',
+                floating: true,
+                position: "top",
+                autoHide: true,
+            });
             navigation.navigate('AllPlaces')
         }
     }
@@ -71,7 +81,6 @@ function EditScreen({ route, navigation }) {
     return (
         <>
             <SafeAreaView>
-
                 <ScrollView>
                     <ImageModal
                         swipeToDismiss={true}
@@ -85,7 +94,6 @@ function EditScreen({ route, navigation }) {
                             uri: place.imageUri
                         }}
                     />
-
                     <KeyboardAvoidingView style={styles.container} behavior="position">
                         <View style={styles.container}>
                             <Text style={styles.label}>Edit place Title</Text>
@@ -107,8 +115,6 @@ function EditScreen({ route, navigation }) {
                                     is24Hour={false}
                                     display="default"
                                     onChange={onChange}
-                                    minimumDate={new Date(2000, 0, 1)}
-                                    maximumDate={new Date(2023, 11, 31)}
                                 />
                             )}
                             <OutlinedButton children={'Change Date'} onPress={showDatePicker} icon={'add'}/>
@@ -118,12 +124,9 @@ function EditScreen({ route, navigation }) {
                                     <View style={styles.separator}></View>
                                 </>
                             )}
-
                         </View>
                     </KeyboardAvoidingView>
-
                 </ScrollView>
-
             </SafeAreaView>
         </>
     );

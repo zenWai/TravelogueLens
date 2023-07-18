@@ -8,7 +8,7 @@ const PointsOfInterest = ({ fetchedPlace, maxResults, handleShowReviews }) => {
         fetchedPlace.nearbyPOIS && maxResults > 0 && fetchedPlace.nearbyPOIS.length > 0 && (
             <View style={styles.POIcontainer}>
                 <View style={styles.ContainerSeparator}></View>
-                <Text style={styles.label}>Nearby Points of Interest you might want to visit</Text>
+                <Text style={styles.label}>Points of interest in close proximity!</Text>
                 {fetchedPlace.nearbyPOIS.slice(0, maxResults).map((poi, index) => (
                     <React.Fragment key={poi.place_id}>
                         <View style={styles.POIitem}>
@@ -45,7 +45,7 @@ const PointsOfInterest = ({ fetchedPlace, maxResults, handleShowReviews }) => {
                                             </Text>
                                             <View>
                                                 <OutlinedButton icon='chatbubbles'
-                                                                children={`What are people saying about ${poi.name} ?`}
+                                                                children={`Discover public opinions about ${poi.name}`}
                                                                 color={Colors.primary500}
                                                                 onPress={() => handleShowReviews(poi.place_id)}/>
                                             </View>

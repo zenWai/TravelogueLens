@@ -10,7 +10,7 @@ import formatDate from "../util/FormatDate";
 import ImageModal from "react-native-image-modal";
 
 function PlaceDetails({ route, navigation }) {
-    const [fetchedPlace, setFetchedPlace] = useState();
+    const [fetchedPlace, setFetchedPlace] = useState(null);
     const [currentReviews, setCurrentReviews] = useState([]);
     const [isReviewVisible, setIsReviewVisible] = useState(false);
     const [isLoading, setIsLoading] = useState(true);

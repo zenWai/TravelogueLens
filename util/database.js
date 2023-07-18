@@ -6,6 +6,8 @@ import countryCodeToEmoji from "./countryCodeToEmoji";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {placeImages} from "./createFakeInfoPlaces";
 import {Image} from 'react-native';
+import {showMessage} from "react-native-flash-message";
+import formatDate from "./FormatDate";
 
 const database = SQLite.openDatabase('places.db');
 
@@ -94,6 +96,15 @@ export function insertPlace(place) {
                 ],
                 (_, result) => {
                     resolve(result);
+                    showMessage({
+                        message: `Congratulations!`,
+                        description: `You've successfully created a new place named ${place.title.toUpperCase()}. This exciting place, captured on ${formatDate(formattedDate).toUpperCase()}, showcases the beauty of ${place.city.toUpperCase()}, ${countryFlagEmoji}. You must have had quite an adventure!`,
+                        type: "success",
+                        icon: 'auto',
+                        floating: true,
+                        position: "top",
+                        autoHide: false,
+                    });
                 },
                 (_, error) => {
                     console.log(error);

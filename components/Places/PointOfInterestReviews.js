@@ -36,7 +36,7 @@ function ReviewsList({ reviews, isVisible, closeModal }) {
                         showsHorizontalScrollIndicator={false}
                         ItemSeparatorComponent={() => <View style={styles.separator}/>}
                     />
-                    <IconButton icon="close-circle" color={Colors.accent500} size={24} onPress={closeModal}/>
+                    <IconButton icon="close-circle" color={Colors.accent500} size={44} onPress={closeModal}/>
                 </View>
             </View>
         </Modal>

@@ -6,6 +6,7 @@ import {ActivityIndicator, Alert, StyleSheet, View} from "react-native";
 import {Colors} from "../constants/colors";
 import * as FileSystem from 'expo-file-system';
 import {InterestingFacts} from "../util/InterestingFacts";
+import {showMessage} from "react-native-flash-message";
 
 function AddPlace({ navigation }) {
     const [isLoading, setIsLoading] = useState(false);
@@ -18,10 +19,12 @@ function AddPlace({ navigation }) {
             const country = infoFromLocation.country;
             const countryCode = infoFromLocation.countryCode;
             const city = infoFromLocation.city;
+            // Same alert before getting a location from map,
+            // But this will fire if location on photo is not recognized by getAddress // will it ever happen?
             if (!city || !country) {
                 Alert.alert(
-                    'Location not found or too rural',
-                    'You can pick a nearby location on your map'
+                    'Location Unavailable',
+                    'The selected location was not found or it may be too remote. Please choose a location closer to a city or town.'
                 );
                 return;
             }
