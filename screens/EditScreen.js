@@ -74,12 +74,12 @@ function EditScreen({ route, navigation }) {
                 position: "top",
                 autoHide: true,
             });
-            navigation.navigate('AllPlaces')
+            navigation.navigate('AllPlaces', { editedPlace: place });
         }
     }
 
     return (
-        <>
+        <View style={{ flex: 1 }}>
             <SafeAreaView>
                 <ScrollView>
                     <ImageModal
@@ -96,7 +96,7 @@ function EditScreen({ route, navigation }) {
                     />
                     <KeyboardAvoidingView style={styles.container} behavior="position">
                         <View style={styles.container}>
-                            <Text style={styles.label}>Edit place Title</Text>
+                            <Text style={styles.text}>Edit place Title</Text>
                             <TextInput
                                 style={styles.input}
                                 onChangeText={(text) => {
@@ -105,7 +105,7 @@ function EditScreen({ route, navigation }) {
                                 value={title}
                             />
                             {date.getTime() !== initialDateObject.getTime() && Platform.OS === 'android' &&
-                                <Text style={styles.label}> New Date: {date.toISOString().split('T')[0]}</Text>
+                                <Text style={styles.text}> New Date: {date.toISOString().split('T')[0]}</Text>
                             }
                             {show && Platform.OS === 'ios' && (
                                 <DateTimePicker
@@ -117,18 +117,18 @@ function EditScreen({ route, navigation }) {
                                     onChange={onChange}
                                 />
                             )}
+                            <View style={styles.separator}></View>
                             <OutlinedButton children={'Change Date'} onPress={showDatePicker} icon={'add'}/>
                             {(title !== place.title || date.getTime() !== initialDateObject.getTime()) && (
                                 <>
                                     <OutlinedButton children='Save' icon="save-outline" onPress={saveEditedPlace}/>
-                                    <View style={styles.separator}></View>
                                 </>
                             )}
                         </View>
                     </KeyboardAvoidingView>
                 </ScrollView>
             </SafeAreaView>
-        </>
+        </View>
     );
 }
 
@@ -139,20 +139,14 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: Colors.gray700,
-        padding: 20,
-        justifyContent: 'center',
+        padding: 24,
     },
     text: {
         color: Colors.primary500,
         textAlign: 'center',
         fontWeight: 'bold',
         fontSize: 16,
-    },
-    label: {
-        fontSize: 18,
-        fontWeight: 'bold',
-        color: Colors.primary200,
-        marginBottom: 10,
+        marginVertical: 12,
     },
     input: {
         borderWidth: 1,
@@ -160,6 +154,10 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         padding: 10,
         color: Colors.primary200,
-        marginBottom: 20,
+    },
+    separator: {
+        height: 3,
+        backgroundColor: Colors.primary800,
+        margin: 12,
     },
 })

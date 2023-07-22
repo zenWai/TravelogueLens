@@ -8,7 +8,7 @@ import {useIsFocused, useNavigation, useRoute} from "@react-navigation/native";
 import {showMessage} from "react-native-flash-message";
 
 function LocationPicker({ location, onLocationPick }) {
-    const [pickedLocation, setPickedLocation] = useState();
+    const [pickedLocation, setPickedLocation] = useState({});
     const [locationPermissionInformation, requestPermission] = useForegroundPermissions();
     const navigation = useNavigation();
     const route = useRoute();

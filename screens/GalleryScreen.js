@@ -25,18 +25,20 @@ function GalleryScreen({ navigation, route }) {
         <GestureHandlerRootView>
             <Carousel
                 keyExtractor={(item) => item.id}
-                loop
+                loop={false}
                 width={width}
                 autoPlay={false}
                 data={places}
-                scrollAnimationDuration={1000}
+                windowSize={8}
+                scrollAnimationDuration={500}
                 onSnapToItem={(index) => {
                     setActiveIndex(index);
                     navigation.setOptions({
                         headerTitle: () => (
-                            <View style={{ flex: 1, marginHorizontal: 10 }}>
+                            <View style={{ flex: 1, paddingHorizontal: 10 }}>
                                 <Text style={{ fontSize: 18 }}>{places[index].title}</Text>
-                                <Text style={{ fontSize: 16 }}>{`${places[index].countryFlagEmoji} ${places[index].city}`}</Text>
+                                <Text
+                                    style={{ fontSize: 16 }}>{`${places[index].countryFlagEmoji} ${places[index].city}`}</Text>
                             </View>
                         ),
                     });
@@ -46,7 +48,7 @@ function GalleryScreen({ navigation, route }) {
                         <ImageModal
                             swipeToDismiss={true}
                             resizeMode="stretch"
-                            imageBackgroundColor={Colors.primary200}
+                            imageBackgroundColor={Colors.gray700}
                             style={{
                                 flex: 1,
                                 width: width,
@@ -60,7 +62,7 @@ function GalleryScreen({ navigation, route }) {
                                 top: 0,
                                 left: 0,
                                 width: '100%',
-                                backgroundColor: 'rgba(26, 172, 240,0.6)', // semi-transparent black background
+                                backgroundColor: 'rgba(26, 172, 240,0.6)',
                                 zIndex: 1,
                                 padding: 10,
                                 alignItems: 'center',

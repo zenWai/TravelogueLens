@@ -1,17 +1,18 @@
-import {GOOGLE_API_KEY} from '@env'
+import Constants from 'expo-constants';
 
+const GOOGLE = Constants.expoConfig.extra.GOOGLE;
 
 export function getMapPreview(lat, lng) {
-    return `https://maps.googleapis.com/maps/api/staticmap?center=${lat},${lng}&zoom=14&size=400x200&maptype=roadmap&markers=color:red%7Clabel:S%7C${lat},${lng}&key=${GOOGLE_API_KEY}`;
+    return `https://maps.googleapis.com/maps/api/staticmap?center=${lat},${lng}&zoom=14&size=400x200&maptype=roadmap&markers=color:red%7Clabel:S%7C${lat},${lng}&key=${GOOGLE}`;
 }
 
 export function getPOIPhoto(photo_reference) {
     const photoReference = photo_reference.replace(/(\r\n|\n|\r)/gm, '');
-    return `https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=${photoReference}&key=${GOOGLE_API_KEY}`;
+    return `https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=${photoReference}&key=${GOOGLE}`;
 }
 
 export async function getAddress(lat, lng) {
-    const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${GOOGLE_API_KEY}`;
+    const url = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${GOOGLE}`;
     try {
         const response = await fetch(url);
         const data = await response.json();
@@ -45,9 +46,9 @@ export async function getAddress(lat, lng) {
 }
 
 export function getNearbyPointsOfInterest(lat, lng, maxResults) {
-    const radius = 50000; // Search radius in meters
+    const radius = 20000; // Search radius in meters
 
-    const url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${lat},${lng}&radius=${radius}&key=${GOOGLE_API_KEY}`;
+    const url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${lat},${lng}&type=tourist_attraction&rankby=prominence&radius=${radius}&key=${GOOGLE}`;
 
     return fetch(url)
         .then(response => response.json())
@@ -61,6 +62,7 @@ export function getNearbyPointsOfInterest(lat, lng, maxResults) {
                 'natural_feature',
                 'town_square',
                 'tourist_attraction',
+                'park',
             ];
             //  the desirable places get prioritized and are moved to the front of the array.
             //  If there are not enough desirable places, point_of_interest places fill up the remaining spots up to maxResults
@@ -102,7 +104,7 @@ function formatPlace(place) {
 }
 
 export async function fetchPointOfInterestReviews(placeId) {
-    const response = await fetch(`https://maps.googleapis.com/maps/api/place/details/json?placeid=${placeId}&key=${GOOGLE_API_KEY}`);
+    const response = await fetch(`https://maps.googleapis.com/maps/api/place/details/json?placeid=${placeId}&key=${GOOGLE}`);
     const data = await response.json();
     return data.result.reviews;
 }

@@ -177,6 +177,7 @@ function Map({ navigation, route }) {
     }
 
     return <MapView
+        provider={undefined}
         style={styles.map}
         region={region}
         onPress={selectLocationHandler}

@@ -1,17 +1,23 @@
-import {ActivityIndicator, Keyboard, KeyboardAvoidingView, StyleSheet, Text, TextInput, View} from "react-native";
+import {
+    Keyboard,
+    KeyboardAvoidingView,
+    StyleSheet,
+    Text,
+    TextInput,
+    TouchableWithoutFeedback,
+    View
+} from "react-native";
 import {useEffect, useState} from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {getMaxPOIResultsSetting} from "../util/database";
-import {Colors} from "../constants/colors";
-import fakePlaces from "../util/createFakeInfoPlaces";
-import {createFakeInfo} from "../util/createFakeInfo";
 import OutlinedButton from "../components/UI/OutlinedButton";
 import {showMessage} from "react-native-flash-message";
+import {Colors} from "../constants/colors";
 
 function SettingsScreen() {
-    const [maxResults, setMaxResults] = useState(5);
-    const [isLoading, setLoading] = useState(false);
-    const [currentProgress, setCurrentProgress] = useState(0);
+    const [maxResults, setMaxResults] = useState(null);
+    /*const [isLoading, setLoading] = useState(false);
+    const [currentProgress, setCurrentProgress] = useState(0);*/
 
     useEffect(() => {
         getMaxPOIResultsSetting().then(setMaxResults);
@@ -40,8 +46,8 @@ function SettingsScreen() {
             setMaxResults("");
         } else {
             const parsedValue = parseInt(value, 10);
-            if (parsedValue > 10) {
-                setMaxResults(10);
+            if (parsedValue > 3) {
+                setMaxResults(3);
             } else if (parsedValue < 0) {
                 setMaxResults(0);
             } else {
@@ -50,7 +56,7 @@ function SettingsScreen() {
         }
     };
 
-    const insertFakePlaces = async () => {
+    /*const insertFakePlaces = async () => {
         try {
             setLoading(true);
             for (let i = 0; i < fakePlaces.length; i++) {
@@ -78,27 +84,31 @@ function SettingsScreen() {
                 autoHide: false,
             });
         }
-    };
+    };*/
 
     return (
-        <KeyboardAvoidingView style={styles.container} behavior="padding">
-            <Text style={styles.label}>Set the limit for displayed nearby Points of Interest (maximum is 10):</Text>
-            <TextInput
-                style={styles.input}
-                value={maxResults.toString()}
-                onChangeText={handleMaxResultsChange}
-                keyboardType="numeric"
-            />
-            <OutlinedButton children='Save' icon="save-outline" onPress={saveMaxResultsSetting}/>
-            <View style={styles.separator}></View>
-            <OutlinedButton children='Insert Fake Places' icon="globe-outline" onPress={insertFakePlaces}/>
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+            <KeyboardAvoidingView style={styles.container} behavior="position">
+                <Text style={styles.label}>Set the limit for displayed nearby Points of Interest (maximum is 3):</Text>
+                {maxResults !== null &&
+                    <TextInput
+                        style={styles.input}
+                        value={maxResults.toString()}
+                        onChangeText={handleMaxResultsChange}
+                        keyboardType="numeric"
+                    />
+                }
+                <OutlinedButton children='Save' icon="save-outline" onPress={saveMaxResultsSetting}/>
+                <View style={styles.separator}></View>
+                {/*<OutlinedButton children='Insert Fake Places' icon="globe-outline" onPress={insertFakePlaces}/>
             {isLoading && (
                 <>
                     <ActivityIndicator size="large" color="#0000ff"/>
                     <Text style={{ color: 'white' }}>{`${currentProgress} / ${fakePlaces.length}`}</Text>
                 </>
-            )}
-        </KeyboardAvoidingView>
+            )}*/}
+            </KeyboardAvoidingView>
+        </TouchableWithoutFeedback>
     );
 }
 
@@ -119,7 +129,7 @@ const styles = StyleSheet.create({
     label: {
         fontSize: 18,
         fontWeight: 'bold',
-        color: Colors.primary200,
+        color: Colors.primary500,
         marginBottom: 10,
     },
     input: {

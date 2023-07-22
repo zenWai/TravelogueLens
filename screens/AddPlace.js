@@ -6,7 +6,6 @@ import {ActivityIndicator, Alert, StyleSheet, View} from "react-native";
 import {Colors} from "../constants/colors";
 import * as FileSystem from 'expo-file-system';
 import {InterestingFacts} from "../util/InterestingFacts";
-import {showMessage} from "react-native-flash-message";
 
 function AddPlace({ navigation }) {
     const [isLoading, setIsLoading] = useState(false);
@@ -26,18 +25,31 @@ function AddPlace({ navigation }) {
                     'Location Unavailable',
                     'The selected location was not found or it may be too remote. Please choose a location closer to a city or town.'
                 );
-                return;
+                throw new Error('Location unavailable');
             }
-            const maxResults = await getMaxPOIResultsSetting();
+            /*const maxResults = await getMaxPOIResultsSetting();
             const nearbyPOIS = await getNearbyPointsOfInterest(place.location.lat, place.location.lng, maxResults);
-            const interestingFact = await InterestingFacts(city, country);
-            const poiPhotoPaths = [];
+            const interestingFact = await InterestingFacts(city, country);*/
+            const [maxResults, nearbyPOIS, interestingFact] = await Promise.all([
+                getMaxPOIResultsSetting(),
+                getNearbyPointsOfInterest(place.location.lat, place.location.lng, maxResults),
+                InterestingFacts(city, country),
+            ]);
+            /*const poiPhotoPaths = [];
             for (let poi of nearbyPOIS) {
                 if (poi.photo_reference) {
                     const path = await downloadAndSavePOIPhoto(poi.photo_reference);
                     poiPhotoPaths.push(path);
                 }
+            }*/
+            let poiPhotoPromises = [];
+            if (Array.isArray(nearbyPOIS)) {
+                poiPhotoPromises = nearbyPOIS
+                    .filter(poi => poi.photo_reference)
+                    .map(poi => downloadAndSavePOIPhoto(poi.photo_reference));
             }
+            const poiPhotoPaths = await Promise.all(poiPhotoPromises);
+
             const newImageUri = FileSystem.documentDirectory + place.imageUri.split('/').pop();
             await FileSystem.copyAsync({
                 from: place.imageUri,
@@ -56,12 +68,12 @@ function AddPlace({ navigation }) {
                 interestingFact,
             };
             await insertPlace(newPlace);
-            navigation.navigate('AllPlaces');
+            navigation.navigate('AllPlaces', { createdPlace: newPlace });
         } catch (error) {
-            console.log('Error creating place:', error);
+            console.log('Error creating place');
             Alert.alert(
-                error,
-                'Error occurred while creating the place, please try again',
+                'Oops! Something went wrong!',
+                'We encountered a problem while trying to create your place. Please check your network connection and gps connectivity and try again.',
                 [{ text: 'Okay' }]
             );
         } finally {

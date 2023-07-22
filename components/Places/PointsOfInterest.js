@@ -69,8 +69,9 @@ const styles = StyleSheet.create({
     label: {
         fontSize: 18,
         fontWeight: 'bold',
-        color: Colors.primary200,
+        color: Colors.primary500,
         marginBottom: 10,
+        textAlign: 'center',
     },
     POIcontainer: {
         flex: 1,

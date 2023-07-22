@@ -98,7 +98,7 @@ export function insertPlace(place) {
                     resolve(result);
                     showMessage({
                         message: `Congratulations!`,
-                        description: `You've successfully created a new place named ${place.title.toUpperCase()}. This exciting place, captured on ${formatDate(formattedDate).toUpperCase()}, showcases the beauty of ${place.city.toUpperCase()}, ${countryFlagEmoji}. You must have had quite an adventure!`,
+                        description: `You've successfully created ${place.title.toUpperCase()}. This exciting place, captured on ${formatDate(formattedDate).toUpperCase()}, showcases the beauty of ${place.city.toUpperCase()}, ${countryFlagEmoji}. You must have had quite an adventure!`,
                         type: "success",
                         icon: 'auto',
                         floating: true,
@@ -335,8 +335,7 @@ export function deletePlace(id) {
 }
 
 
-export async function getMaxPOIResultsSetting() {
-    const DEFAULT_MAX_RESULTS = 4;
+export async function getMaxPOIResultsSetting(DEFAULT_MAX_RESULTS = 3) {
     const storedMaxResults = await AsyncStorage.getItem('maxResults');
     return storedMaxResults ? parseInt(storedMaxResults, 10) : DEFAULT_MAX_RESULTS;
 }

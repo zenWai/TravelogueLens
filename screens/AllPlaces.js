@@ -1,6 +1,5 @@
 import PlacesList from "../components/Places/PlacesList";
-import React, {useContext, useState} from 'react';
-import {useFocusEffect} from "@react-navigation/native";
+import React, {useContext, useEffect, useState} from 'react';
 import {deletePlace, fetchPlaces, init} from "../util/database";
 import {ActivityIndicator, StyleSheet, View} from "react-native";
 import {Colors} from "../constants/colors";
@@ -55,12 +54,9 @@ function AllPlaces({ route, navigation }) {
             setLoading(false);
         }
     }
-
-    useFocusEffect(
-        React.useCallback(() => {
-            loadPlaces();
-        }, [filter, sort])
-    );
+    useEffect(() => {
+        loadPlaces();
+    }, [filter, sort, fetchPlaces, route.params?.createdPlace, route.params?.editedPlace]);
 
     const deletePlaceHandler = (id) => {
         // Database
