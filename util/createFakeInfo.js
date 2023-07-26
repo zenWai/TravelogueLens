@@ -16,9 +16,9 @@ export async function createFakeInfo(place) {
         };
         await insertFakePlaces(newPlace);
     } catch (error) {
-        console.log('Error creating place:', error);
+        console.log('Error creating place:');
         Alert.alert(
-            error,
+            'Oops something went wrong',
             'Error occurred while creating the place, please try again',
             [{ text: 'Okay' }]
         );

@@ -27,11 +27,11 @@ function ImagePicker({ onImageTaken }) {
             const permissionResponse = await requestPermission();
             if (permissionResponse.status === PermissionStatus.DENIED) {
                 Alert.alert(
-                    'Insufficient Permissions',
-                    'You need to grant camera permissions to use this app',
+                    'Camera Permission Required',
+                    'This app requires camera access and this allows you to take photos directly from the app and add them to your favorite places.. Please grant Camera Permission in settings.',
                     [
                         {
-                            text: 'Cancel',
+                            text: 'Not Now',
                             style: 'cancel',
                         },
                         {
@@ -53,11 +53,11 @@ function ImagePicker({ onImageTaken }) {
             const permissionMLResponse = await requestMLPermission();
             if (permissionMLResponse.status === PermissionStatus.DENIED) {
                 Alert.alert(
-                    'Insufficient Permissions',
-                    'You need to grant camera permissions to use this app',
+                    'Media Library Permission Required',
+                    'This app requires access to your media library to let you choose photos for your favorite places. Please allow media library permissions in settings.',
                     [
                         {
-                            text: 'Cancel',
+                            text: 'Not Now',
                             style: 'cancel',
                         },
                         {
@@ -103,8 +103,8 @@ function ImagePicker({ onImageTaken }) {
             }
         } catch (error) {
             showMessage({
-                message: `${error}`,
-                description: `Please try again!`,
+                message: `Oops something went wrong`,
+                description: `Please try again! Ensure you have internet connection and the required permissions`,
                 type: "warning",
                 icon: 'auto',
                 floating: true,
@@ -198,8 +198,8 @@ function ImagePicker({ onImageTaken }) {
             }
         } catch (error) {
             showMessage({
-                message: `${error}`,
-                description: `Please try again!`,
+                message: `Oops something went wrong`,
+                description: `Please try again! Ensure you have internet connection and the required permissions allowed`,
                 type: "warning",
                 icon: 'auto',
                 floating: true,

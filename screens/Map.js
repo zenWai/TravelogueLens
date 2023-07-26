@@ -4,6 +4,7 @@ import {useCallback, useEffect, useLayoutEffect, useState} from "react";
 import IconButton from "../components/UI/IconButton";
 import {getCurrentPositionAsync, PermissionStatus, requestForegroundPermissionsAsync} from 'expo-location';
 import {getAddress} from "../util/location";
+import {showMessage} from "react-native-flash-message";
 
 function Map({ navigation, route }) {
     const [selectedLocation, setSelectedLocation] = useState();
@@ -59,19 +60,26 @@ function Map({ navigation, route }) {
     }
 
     async function validateLocation(selectedLocation) {
-        const infoFromLocation = await getAddress(selectedLocation.lat, selectedLocation.lng);
-        const country = infoFromLocation.country;
-        const city = infoFromLocation.city;
+        try {
+            const infoFromLocation = await getAddress(selectedLocation.lat, selectedLocation.lng);
+            const country = infoFromLocation.country;
+            const city = infoFromLocation.city;
 
-        if (!city || !country) {
+            if (!city || !country) {
+                Alert.alert(
+                    'Location Unavailable',
+                    'The selected location was not found or it may be too remote. Please choose a location closer to a city or town.'
+                );
+                return false;
+            }
+
+            return true;
+        } catch (error) {
             Alert.alert(
-                'Location Unavailable',
-                'The selected location was not found or it may be too remote. Please choose a location closer to a city or town.'
+                'Location Service Unavailable',
+                'There was a problem retrieving location data. Please check your internet connection and try again.'
             );
-            return false;
         }
-
-        return true;
     }
 
     //avoiding unnecessary render cycles &&|| infinite loops
@@ -92,6 +100,8 @@ function Map({ navigation, route }) {
                         pickedLng: selectedLocation.lng
                     }
                 );
+            } else {
+
             }
         } catch (error) {
             console.log(error);
@@ -124,18 +134,19 @@ function Map({ navigation, route }) {
     useLayoutEffect(() => {
         if (!initialLat && !initialLng && !currentSetLocationLat && !currentSetLocationLng) {
             const fetchCurrentLocation = async () => {
-                const hasPermission = await verifyPermissions(); // Invoke hasPermission function
+                const hasPermission = await verifyPermissions();
+
                 function openSettings() {
                     Linking.openSettings();
                 }
 
-                if (!hasPermission) { // Change the condition here
+                if (!hasPermission) {
                     Alert.alert(
-                        'Permission Required',
-                        'This app requires location permissions to function correctly. Please grant the necessary permissions.',
+                        'Location Permission Required',
+                        'This app requires location access to show your current position on the map, making it easier for you to add places to your favorites. Please grant location permissions in settings.',
                         [
                             {
-                                text: 'Cancel',
+                                text: 'Not Now',
                                 style: 'cancel',
                             },
                             {
@@ -148,6 +159,18 @@ function Map({ navigation, route }) {
                 setIsLoading(true);
                 try {
                     const { coords } = await getCurrentPositionAsync({});
+                    if (!coords) {
+                        showMessage({
+                            message: `Oops something went wrong`,
+                            description: `Please make sure your device's location services are turned on to show your current location on map.`,
+                            type: "warning",
+                            icon: 'auto',
+                            floating: true,
+                            position: "top",
+                            autoHide: true,
+                        });
+                        setIsLoading(false);
+                    }
                     setRegion(prevRegion => ({
                         ...prevRegion,
                         latitude: coords.latitude,
@@ -159,7 +182,8 @@ function Map({ navigation, route }) {
                         lng: coords.longitude,
                     });
                 } catch (error) {
-                    console.log('An error occurred while retrieving the current location:', error);
+                    console.log('error on map location');
+                    setIsLoading(false);
                 } finally {
                     setIsLoading(false);
                 }

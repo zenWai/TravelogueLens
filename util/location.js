@@ -20,12 +20,17 @@ export async function getAddress(lat, lng) {
         let city = '';
         let country = '';
         let countryCode = '';
-
+        console.log(JSON.stringify(data.results[0].address_components, null, 2));
         // Extract city and country from address components
         const addressComponents = data.results[0].address_components;
         for (const component of addressComponents) {
             const componentType = component.types[0];
-            if (componentType === 'locality') {
+            // Sometimes locality, postal_town empty, in UK specially
+            if (!city && (componentType === 'locality' || componentType === 'postal_town')) {
+                city = component.long_name;
+            } else if (!city && (componentType === 'administrative_area_level_2')) {
+                city = component.long_name;
+            } else if (!city && (componentType === 'administrative_area_level_1')) {
                 city = component.long_name;
             } else if (componentType === 'country') {
                 country = component.long_name;
@@ -40,7 +45,7 @@ export async function getAddress(lat, lng) {
             countryCode: countryCode,
         };
     } catch (error) {
-        console.log('Error fetching address:', error);
+        console.log('Error fetching address:');
         throw error;
     }
 }
@@ -87,7 +92,7 @@ export function getNearbyPointsOfInterest(lat, lng, maxResults) {
                 .map(formatPlace);
         })
         .catch(error => {
-            console.log('Error fetching nearby points of interest:', error);
+            console.log('Error fetching nearby points of interest:');
             throw error;
         });
 }

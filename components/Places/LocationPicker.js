@@ -41,7 +41,6 @@ function LocationPicker({ location, onLocationPick }) {
                 try {
                     onLocationPick({ ...pickedLocation });
                 } catch (error) {
-                    console.log('Error fetching address:', error);
                     Alert.alert(
                         'Oops, something went wrong',
                         'Could not get your location. Please try again!'
@@ -63,11 +62,11 @@ function LocationPicker({ location, onLocationPick }) {
             const permissionResponse = await requestPermission();
             if (permissionResponse.status === PermissionStatus.DENIED) {
                 Alert.alert(
-                    'Insufficient Permissions',
-                    'You need to grant location permissions to use this app',
+                    'Location Permission Required',
+                    'This app requires location access to show your current position on the map, making it easier for you to add places to your favorites. Please grant location permissions in settings.',
                     [
                         {
-                            text: 'Cancel',
+                            text: 'Not Now',
                             style: 'cancel',
                         },
                         {
@@ -93,14 +92,27 @@ function LocationPicker({ location, onLocationPick }) {
         setLoadingLocation(true);
         try {
             const location = await getCurrentPositionAsync();
+            if (!location) {
+                showMessage({
+                    message: `Oops something went wrong`,
+                    description: `Please make sure your device's location services are turned on and try again.`,
+                    type: "warning",
+                    icon: 'auto',
+                    floating: true,
+                    position: "top",
+                    autoHide: true,
+                });
+                setLoadingLocation(false);
+                return;
+            }
             setPickedLocation({
                 lat: location.coords.latitude,
                 lng: location.coords.longitude
             });
         } catch (error) {
             showMessage({
-                message: `${error}`,
-                description: `Please try again!`,
+                message: `Oops something went wrong`,
+                description: `Please make sure your device's location services are turned on and try again.`,
                 type: "warning",
                 icon: 'auto',
                 floating: true,

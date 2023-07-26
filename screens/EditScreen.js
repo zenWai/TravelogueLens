@@ -62,7 +62,7 @@ function EditScreen({ route, navigation }) {
         try {
             await editPlace(place.id, title, formattedDate);
         } catch (error) {
-            console.log('Error in saving editedPlace', error);
+            console.log('Error in saving editedPlace');
             Alert.alert('Oops!', `There was an issue saving your changes. Please try again.`);
         } finally {
             showMessage({

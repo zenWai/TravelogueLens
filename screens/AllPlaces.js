@@ -40,7 +40,6 @@ function AllPlaces({ route, navigation }) {
             }
 
         } catch (error) {
-            console.log('Error loading places:', error);
             showMessage({
                 message: `Oops!`,
                 description: `We encountered an error while loading your places. Please try again.`,
