@@ -67,15 +67,17 @@ function PlaceForm({ onCreatePlace }) {
 
 
     return (
-        <ScrollView style={styles.form}>
-            <View>
-                <Text style={styles.label}>Title</Text>
-                <TextInput style={styles.input} onChangeText={changeTitleHandler} value={enteredTitle}/>
-            </View>
-            <ImagePicker onImageTaken={onImageTakenHandler}/>
-            <LocationPicker location={locationPicked} onLocationPick={onLocationPickHandler}/>
-            <Button onPress={savePlaceHandler}>Add Place</Button>
-        </ScrollView>
+        <View style={{ flex: 1 }}>
+            <ScrollView style={styles.form}>
+                <View>
+                    <Text style={styles.label}>Title</Text>
+                    <TextInput style={styles.input} onChangeText={changeTitleHandler} value={enteredTitle}/>
+                </View>
+                <ImagePicker onImageTaken={onImageTakenHandler}/>
+                <LocationPicker location={locationPicked} onLocationPick={onLocationPickHandler}/>
+                <Button onPress={savePlaceHandler}>Add Place</Button>
+            </ScrollView>
+        </View>
     );
 }
 

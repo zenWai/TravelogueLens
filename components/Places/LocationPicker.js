@@ -152,7 +152,7 @@ function LocationPicker({ location, onLocationPick }) {
 
 
     return (
-        <View style={{ flex: 1 }}>
+        <View>
             <View style={styles.mapPreview}>
                 {loadingLocation
                     ? (

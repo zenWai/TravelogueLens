@@ -1,4 +1,4 @@
-import {ActivityIndicator, Alert, Image, Linking, Platform, StyleSheet, Text, View} from "react-native";
+import {ActivityIndicator, Alert, Dimensions, Image, Linking, Platform, StyleSheet, Text, View} from "react-native";
 import {
     launchCameraAsync,
     launchImageLibraryAsync,
@@ -17,6 +17,8 @@ function ImagePicker({ onImageTaken }) {
     const [mediaLibraryPermissionInformation, requestMLPermission] = useMediaLibraryPermissions();
     const [pickedImage, setPickedImage] = useState();
     const [loadingPicture, setLoadingPicture] = useState(false);
+    const [imageHeight, setImageHeight] = useState(200);
+    const MAX_HEIGHT = Dimensions.get('window').height * 0.5;
 
     const openSettings = useCallback(() => {
         Linking.openSettings();
@@ -213,8 +215,15 @@ function ImagePicker({ onImageTaken }) {
 
     let imagePreview = <Text>No image taken yet.</Text>;
 
+    const onImageLoad = () => {
+        Image.getSize(pickedImage[0].uri, (width, height) => {
+            const aspectRatioHeight = Dimensions.get('window').width * (height / width);
+
+            setImageHeight(Math.min(aspectRatioHeight, MAX_HEIGHT));
+        });
+    };
     if (pickedImage) {
-        imagePreview = <Image style={styles.image} source={{ uri: pickedImage[0].uri }} resizeMode="stretch"/>;
+        imagePreview = <Image onLoad={onImageLoad} style={[styles.image, {height: imageHeight}]} source={{ uri: pickedImage[0].uri }} resizeMode="stretch"/>;
     }
     return (
         <View>
@@ -237,7 +246,6 @@ export default ImagePicker;
 const styles = StyleSheet.create({
     imagePreview: {
         width: '100%',
-        height: 200,
         marginVertical: 8,
         justifyContent: 'center',
         alignItems: 'center',
@@ -246,7 +254,6 @@ const styles = StyleSheet.create({
     },
     image: {
         width: '100%',
-        height: '100%',
         borderRadius: 4,
     }
 })
