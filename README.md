@@ -38,7 +38,13 @@
 
 ## About The Project
 
-![TravelogueLens App](https://traveloguelens.netlify.app/static/media/snapshot1.78619872e0f939cc8823.jpg)
+<div float="left">
+  <img src="https://traveloguelens.netlify.app/static/media/snapshot1.78619872e0f939cc8823.jpg" width="100" />
+  <img src="https://traveloguelens.netlify.app/static/media/unnamed1.2a8970ba5f498d3dca13.png" width="100" /> 
+  <img src="https://traveloguelens.netlify.app/static/media/unnamed5.e8032cf686a27fb7c382.jpg" width="100" />
+  <img src="https://traveloguelens.netlify.app/static/media/unnamed6.72dad12b730c84247a30.jpg" width="100" />
+  <img src="https://traveloguelens.netlify.app/static/media/unnamed.df048c7138f6f4224a4a.jpg" width="100" />
+</div>
 
 Introducing TravelogueLens, the perfect fusion of a travel guide and a photo album, all in your pocket.
 
@@ -56,13 +62,6 @@ At TravelogueLens, we believe in creating an experience, not just an app. We're 
 But we don't stop there. We value your opinion and are excited to continually improve our app based on your feedback.
 
 TravelogueLens - Frame your adventures, one location at a time.
-<div float="left">
-  <img src="https://traveloguelens.netlify.app/static/media/snapshot1.78619872e0f939cc8823.jpg" width="100" />
-  <img src="https://traveloguelens.netlify.app/static/media/unnamed1.2a8970ba5f498d3dca13.png" width="100" /> 
-  <img src="https://traveloguelens.netlify.app/static/media/unnamed5.e8032cf686a27fb7c382.jpg" width="100" />
-  <img src="https://traveloguelens.netlify.app/static/media/unnamed6.72dad12b730c84247a30.jpg" width="100" />
-  <img src="https://traveloguelens.netlify.app/static/media/unnamed.df048c7138f6f4224a4a.jpg" width="100" />
-</div>
 
 
 ## ⚙️ Main technologies used
