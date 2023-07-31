@@ -30,7 +30,7 @@
 ## Table Of Contents
 
 * [About the Project](#about-the-project)
-* [Built With](#Main-technologies-used)
+* [Built With](#%EF%B8%8F-main-technologies-used)
 * [Usage](#usage)
 * [Roadmap](#roadmap)
 * [License](#license)
