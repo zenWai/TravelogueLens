@@ -39,11 +39,11 @@
 ## About The Project
 
 <div float="left">
-  <img src="https://traveloguelens.netlify.app/static/media/snapshot1.78619872e0f939cc8823.jpg" width="100" />
-  <img src="https://traveloguelens.netlify.app/static/media/unnamed1.2a8970ba5f498d3dca13.png" width="100" /> 
-  <img src="https://traveloguelens.netlify.app/static/media/unnamed5.e8032cf686a27fb7c382.jpg" width="100" />
-  <img src="https://traveloguelens.netlify.app/static/media/unnamed6.72dad12b730c84247a30.jpg" width="100" />
-  <img src="https://traveloguelens.netlify.app/static/media/unnamed.df048c7138f6f4224a4a.jpg" width="100" />
+  <img src="https://traveloguelens.netlify.app/static/media/snapshot1.78619872e0f939cc8823.jpg" height="400" width="200" />
+  <img src="https://traveloguelens.netlify.app/static/media/unnamed1.2a8970ba5f498d3dca13.png" height="400" width="200" /> 
+  <img src="https://traveloguelens.netlify.app/static/media/unnamed5.e8032cf686a27fb7c382.jpg" height="400" width="200" />
+  <img src="https://traveloguelens.netlify.app/static/media/unnamed6.72dad12b730c84247a30.jpg" height="400" width="200" />
+  <img src="https://traveloguelens.netlify.app/static/media/unnamed.df048c7138f6f4224a4a.jpg" height="400" width="200" />
 </div>
 
 Introducing TravelogueLens, the perfect fusion of a travel guide and a photo album, all in your pocket.
