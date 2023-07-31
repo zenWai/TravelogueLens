@@ -107,7 +107,7 @@ See the [open issues](https://github.com/zenwai/RN-MyLittleDiary/issues) for a l
 
 ## License
 
-Distributed under the MIT License. See [LICENSE](https://github.com/zenwai/RN-MyLittleDiary/blob/main/LICENSE.md) for more information.
+Distributed under the MIT License. See [LICENSE](https://github.com/zenwai/RN-MyLittleDiary/LICENSE) for more information.
 
 ## Authors
 
