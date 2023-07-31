@@ -1,4 +1,4 @@
-# <a href="https://github.com/zenwai/RN-MyLittleDiary"><img src="assets/icon.png" alt="Logo" width="80" height="80"></a> TravelogueLens Travel Diary
+# <a href="https://github.com/zenwai/RN-MyLittleDiary"><img src="assets/icon.png" alt="Logo" width="50" height="50"></a> TravelogueLens Travel Diary
 
 <br/>
 
