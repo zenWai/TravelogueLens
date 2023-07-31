@@ -19,7 +19,7 @@
     Your Travel, Your Story: Sort and Showcase Your Gallery of Photos by City or Country.
     <br/>
     <br/>
-    <a href="https://github.com/zenWai/RN-MyLittleDiary/new/master?readme=1#usage">View Demo</a>
+    <a href="#usage">View Demo</a>
     .
     <a href="https://github.com/zenwai/RN-MyLittleDiary/issues">Report Bug</a>
     .
