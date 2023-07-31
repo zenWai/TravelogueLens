@@ -98,7 +98,6 @@ TravelogueLens - Frame your adventures, one location at a time.
   <img src="https://tools.applemediaservices.com/api/badges/download-on-the-app-store/black/en-us?size=250x83&amp;releaseDate=1690675200" alt="Download on the App Store" style="height: 88px;"/>
     <img width="12" />
 </a>
-
 <img src="https://tools-qr-production.s3.amazonaws.com/output/apple-toolbox/8cb0e30d5b9950544d0b54410aed810a/ac1c167ebbadb20bfe4164692f817b74.png" style="height: 144px;"/>
 </div>
 
