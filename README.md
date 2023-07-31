@@ -2,7 +2,7 @@
 
 <br/>
 
-![Issues](https://img.shields.io/github/issues/zenwai/RN-MyLittleDiary) ![License](https://img.shields.io/github/license/zenwai/RN-MyLittleDiary) 
+![Issues](https://img.shields.io/github/issues/zenWai/RN-MyLittleDiary) ![License](https://img.shields.io/github/license/zenWai/RN-MyLittleDiary) 
 
 <p align="center">
   <a href="https://play.google.com/store/apps/details?id=com.zenwai.traveloguelens&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1" style="height: 88px;">
