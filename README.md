@@ -39,11 +39,11 @@
 ## About The Project
 
 <div float="left">
-  <img src="https://traveloguelens.netlify.app/static/media/snapshot1.78619872e0f939cc8823.jpg" height="400" width="200" />
-  <img src="https://traveloguelens.netlify.app/static/media/unnamed1.2a8970ba5f498d3dca13.png" height="400" width="200" /> 
-  <img src="https://traveloguelens.netlify.app/static/media/unnamed5.e8032cf686a27fb7c382.jpg" height="400" width="200" />
-  <img src="https://traveloguelens.netlify.app/static/media/unnamed6.72dad12b730c84247a30.jpg" height="400" width="200" />
-  <img src="https://traveloguelens.netlify.app/static/media/unnamed.df048c7138f6f4224a4a.jpg" height="400" width="200" />
+  <img src="https://github-production-user-asset-6210df.s3.amazonaws.com/124523559/259551413-53d057e2-085a-4a6e-9080-c3626525932a.jpeg" height="400" width="200" />
+  <img src="https://github-production-user-asset-6210df.s3.amazonaws.com/124523559/259551835-2156c1ee-9f2a-45c4-9665-9faaef18073b.png" height="400" width="200" /> 
+  <img src="https://github-production-user-asset-6210df.s3.amazonaws.com/124523559/259551820-4526eddc-3c57-4d79-8bdf-d9bafe618694.jpg" height="400" width="200" />
+  <img src="https://github-production-user-asset-6210df.s3.amazonaws.com/124523559/259551857-b84c6974-f499-4985-847e-65b4d5517646.jpg" height="400" width="200" />
+  <img src="https://github-production-user-asset-6210df.s3.amazonaws.com/124523559/259551872-8737c678-094e-4302-b915-7a880ee6e181.jpg" height="400" width="200" />
 </div>
 
 Introducing TravelogueLens, the perfect fusion of a travel guide and a photo album, all in your pocket.
