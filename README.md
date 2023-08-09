@@ -90,7 +90,7 @@ TravelogueLens - Frame your adventures, one location at a time.
 <a href="https://play.google.com/store/apps/details?id=com.zenwai.traveloguelens&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1" style="height: 88px;"><img alt='Get it on Google Play' src='https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png' style="height: 88px;"/>
 </a>
   <img width="12" />
-  <img src="https://yourimageshare.com/ib/yxlFbCzOHN.webp" style="height: 144px;"/>
+  <img src="https://github.com/zenWai/RN-MyLittleDiary/assets/124523559/733f244b-eabc-49c8-850d-7f519d17ab0b" style="height: 144px;"/>
   <img width="12" />
   <a href="https://apps.apple.com/us/app/traveloguelens-travel-diary/id6451448731?itsct=apps_box_badge&amp;itscg=30200" style="height: 88px;">
     <img width="12" />
